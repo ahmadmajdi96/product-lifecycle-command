@@ -5,7 +5,7 @@ import { usePlm } from "@/lib/plm-store";
 import { PageHeader, Mono, th, td } from "@/components/plm/ui";
 import { Input } from "@/components/ui/input";
 
-export const Route = createFileRoute("/audit")({
+export const Route = createFileRoute("/_authenticated/audit")({
   head: () => ({
     meta: [
       { title: "Audit Trail · Cortanex PLM" },

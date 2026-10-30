@@ -10,7 +10,7 @@ import { Input } from "@/components/ui/input";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { cn } from "@/lib/utils";
 
-export const Route = createFileRoute("/bom")({
+export const Route = createFileRoute("/_authenticated/bom")({
   head: () => ({
     meta: [
       { title: "BOM Workbench · Cortanex PLM" },

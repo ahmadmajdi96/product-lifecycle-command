@@ -3,13 +3,13 @@ import { useState } from "react";
 import { toast } from "sonner";
 import { Plus, Trash2, FileText } from "lucide-react";
 import { usePlm, update, audit, uid, nextRev } from "@/lib/plm-store";
-import { WORK_CENTERS, type Routing, type Operation } from "@/lib/plm-data";
+import { type Routing, type Operation } from "@/lib/plm-data";
 import { PageHeader, Panel, Status, Mono, th, td, Kpi } from "@/components/plm/ui";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
 
-export const Route = createFileRoute("/routings")({
+export const Route = createFileRoute("/_authenticated/routings")({
   head: () => ({
     meta: [
       { title: "Routings · Cortanex PLM" },
@@ -24,6 +24,7 @@ export const Route = createFileRoute("/routings")({
 function Routings() {
   const routings = usePlm((s) => s.routings);
   const docs = usePlm((s) => s.docs);
+  const workCenters = usePlm((s) => s.workCenters);
   const [sel, setSel] = useState(routings[0]?.id);
   const r = routings.find((x) => x.id === sel) ?? routings[0];
   const editable = r.status === "DRAFT";
@@ -78,7 +79,7 @@ function Routings() {
                 <tr key={o.seq} className="border-t border-border">
                   <td className={td}><Mono className="text-primary">{o.seq}</Mono></td>
                   <td className={td}>{editable ? <Input value={o.name} onChange={(e) => setOp(o.seq, { name: e.target.value })} className="h-7 text-xs" /> : o.name}</td>
-                  <td className={td}>{editable ? <select value={o.workCenter} onChange={(e) => setOp(o.seq, { workCenter: e.target.value })} className="h-7 rounded-md border border-input bg-background px-1 font-mono text-xs">{WORK_CENTERS.map((w) => <option key={w}>{w}</option>)}</select> : <Mono>{o.workCenter}</Mono>}</td>
+                  <td className={td}>{editable ? <select value={o.workCenter} onChange={(e) => setOp(o.seq, { workCenter: e.target.value })} className="h-7 rounded-md border border-input bg-background px-1 font-mono text-xs">{workCenters.map((w) => <option key={w.code}>{w.code}</option>)}</select> : <Mono>{o.workCenter}</Mono>}</td>
                   <td className={td}>{editable ? <Input type="number" value={o.setupMin} onChange={(e) => setOp(o.seq, { setupMin: Number(e.target.value) })} className="h-7 w-20 font-mono text-xs" /> : <Mono>{o.setupMin}</Mono>}</td>
                   <td className={td}>{editable ? <Input type="number" value={o.cycleSec} onChange={(e) => setOp(o.seq, { cycleSec: Number(e.target.value) })} className="h-7 w-20 font-mono text-xs" /> : <Mono>{o.cycleSec}</Mono>}</td>
                   <td className={td}>
@@ -94,7 +95,7 @@ function Routings() {
             })}
           </tbody>
         </table>
-        {editable && <Button size="sm" className="mt-3" onClick={() => setOps([...r.ops, { seq: (r.ops.at(-1)?.seq ?? 0) + 10, name: "New operation", workCenter: WORK_CENTERS[0], setupMin: 0, cycleSec: 60 }])}><Plus className="h-3.5 w-3.5" />Add Operation</Button>}
+        {editable && <Button size="sm" className="mt-3" onClick={() => setOps([...r.ops, { seq: (r.ops.at(-1)?.seq ?? 0) + 10, name: "New operation", workCenter: workCenters[0]?.code ?? "WC-ASSY-01", setupMin: 0, cycleSec: 60 }])}><Plus className="h-3.5 w-3.5" />Add Operation</Button>}
       </Panel>
     </div>
   );
