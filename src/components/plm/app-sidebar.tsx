@@ -51,7 +51,7 @@ export function AppSidebar() {
                   return (
                     <SidebarMenuItem key={it.url}>
                       <SidebarMenuButton asChild isActive={active} tooltip={it.title} className="data-[active=true]:border-l-2 data-[active=true]:border-primary data-[active=true]:text-primary">
-                        {"kind" in it ? <Link to="/changes/$kind" params={{ kind: it.kind }}><it.icon className="h-4 w-4" /><span>{it.title}</span></Link> : <Link to={it.url as "/"}><it.icon className="h-4 w-4" /><span>{it.title}</span></Link>
+                        {"kind" in it ? <Link to="/changes/$kind" params={{ kind: it.kind }}><it.icon className="h-4 w-4" /><span>{it.title}</span></Link> : <Link to={it.url as "/items"}><it.icon className="h-4 w-4" /><span>{it.title}</span></Link>}
                       </SidebarMenuButton>
                     </SidebarMenuItem>
                   );
