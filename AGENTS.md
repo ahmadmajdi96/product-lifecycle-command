@@ -8,3 +8,6 @@
 > Commits you push to the connected branch sync back to Lovable and show up in
 > the editor, so keep the branch in a working state.
 <!-- LOVABLE:END -->
+
+- PLM demo data lives in a client-side store (`src/lib/plm-store.ts`, seeded from `src/lib/plm-data.ts`, persisted to localStorage) — no backend yet; swap the store for Lovable Cloud tables when multi-user persistence is needed.
+- tsconfig has `noUncheckedIndexedAccess`, `exactOptionalPropertyTypes` and `noImplicitReturns` off to keep dense UI code readable.
