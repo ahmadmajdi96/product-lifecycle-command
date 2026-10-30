@@ -10,33 +10,128 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as AuditRouteImport } from './routes/audit'
+import { Route as BomRouteImport } from './routes/bom'
+import { Route as DocumentsRouteImport } from './routes/documents'
+import { Route as IntegrationsRouteImport } from './routes/integrations'
+import { Route as ItemsRouteImport } from './routes/items'
+import { Route as RoutingsRouteImport } from './routes/routings'
+import { Route as ChangesKindRouteImport } from './routes/changes.$kind'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AuditRoute = AuditRouteImport.update({
+  id: '/audit',
+  path: '/audit',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const BomRoute = BomRouteImport.update({
+  id: '/bom',
+  path: '/bom',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DocumentsRoute = DocumentsRouteImport.update({
+  id: '/documents',
+  path: '/documents',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const IntegrationsRoute = IntegrationsRouteImport.update({
+  id: '/integrations',
+  path: '/integrations',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ItemsRoute = ItemsRouteImport.update({
+  id: '/items',
+  path: '/items',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const RoutingsRoute = RoutingsRouteImport.update({
+  id: '/routings',
+  path: '/routings',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ChangesKindRoute = ChangesKindRouteImport.update({
+  id: '/changes/$kind',
+  path: '/changes/$kind',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/audit': typeof AuditRoute
+  '/bom': typeof BomRoute
+  '/documents': typeof DocumentsRoute
+  '/integrations': typeof IntegrationsRoute
+  '/items': typeof ItemsRoute
+  '/routings': typeof RoutingsRoute
+  '/changes/$kind': typeof ChangesKindRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/audit': typeof AuditRoute
+  '/bom': typeof BomRoute
+  '/documents': typeof DocumentsRoute
+  '/integrations': typeof IntegrationsRoute
+  '/items': typeof ItemsRoute
+  '/routings': typeof RoutingsRoute
+  '/changes/$kind': typeof ChangesKindRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/audit': typeof AuditRoute
+  '/bom': typeof BomRoute
+  '/documents': typeof DocumentsRoute
+  '/integrations': typeof IntegrationsRoute
+  '/items': typeof ItemsRoute
+  '/routings': typeof RoutingsRoute
+  '/changes/$kind': typeof ChangesKindRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths:
+    | '/'
+    | '/audit'
+    | '/bom'
+    | '/documents'
+    | '/integrations'
+    | '/items'
+    | '/routings'
+    | '/changes/$kind'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to:
+    | '/'
+    | '/audit'
+    | '/bom'
+    | '/documents'
+    | '/integrations'
+    | '/items'
+    | '/routings'
+    | '/changes/$kind'
+  id:
+    | '__root__'
+    | '/'
+    | '/audit'
+    | '/bom'
+    | '/documents'
+    | '/integrations'
+    | '/items'
+    | '/routings'
+    | '/changes/$kind'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AuditRoute: typeof AuditRoute
+  BomRoute: typeof BomRoute
+  DocumentsRoute: typeof DocumentsRoute
+  IntegrationsRoute: typeof IntegrationsRoute
+  ItemsRoute: typeof ItemsRoute
+  RoutingsRoute: typeof RoutingsRoute
+  ChangesKindRoute: typeof ChangesKindRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -48,11 +143,67 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/audit': {
+      id: '/audit'
+      path: '/audit'
+      fullPath: '/audit'
+      preLoaderRoute: typeof AuditRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/bom': {
+      id: '/bom'
+      path: '/bom'
+      fullPath: '/bom'
+      preLoaderRoute: typeof BomRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/documents': {
+      id: '/documents'
+      path: '/documents'
+      fullPath: '/documents'
+      preLoaderRoute: typeof DocumentsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/integrations': {
+      id: '/integrations'
+      path: '/integrations'
+      fullPath: '/integrations'
+      preLoaderRoute: typeof IntegrationsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/items': {
+      id: '/items'
+      path: '/items'
+      fullPath: '/items'
+      preLoaderRoute: typeof ItemsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/routings': {
+      id: '/routings'
+      path: '/routings'
+      fullPath: '/routings'
+      preLoaderRoute: typeof RoutingsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/changes/$kind': {
+      id: '/changes/$kind'
+      path: '/changes/$kind'
+      fullPath: '/changes/$kind'
+      preLoaderRoute: typeof ChangesKindRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AuditRoute: AuditRoute,
+  BomRoute: BomRoute,
+  DocumentsRoute: DocumentsRoute,
+  IntegrationsRoute: IntegrationsRoute,
+  ItemsRoute: ItemsRoute,
+  RoutingsRoute: RoutingsRoute,
+  ChangesKindRoute: ChangesKindRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
