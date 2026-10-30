@@ -9,6 +9,8 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
+import { Route as AuthRouteImport } from './routes/auth'
 import { Route as AuthenticatedIndexRouteImport } from './routes/_authenticated/index'
 import { Route as AuthenticatedAuditRouteImport } from './routes/_authenticated/audit'
 import { Route as AuthenticatedBomRouteImport } from './routes/_authenticated/bom'
@@ -18,60 +20,71 @@ import { Route as AuthenticatedItemsRouteImport } from './routes/_authenticated/
 import { Route as AuthenticatedRoutingsRouteImport } from './routes/_authenticated/routings'
 import { Route as AuthenticatedChangesKindRouteImport } from './routes/_authenticated/changes.$kind'
 
-const AuthenticatedIndexRoute = AuthenticatedIndexRouteImport.update({
-  id: '/_authenticated/',
-  path: '/',
+const AuthenticatedRouteRoute = AuthenticatedRouteRouteImport.update({
+  id: '/_authenticated',
   getParentRoute: () => rootRouteImport,
+} as any)
+const AuthRoute = AuthRouteImport.update({
+  id: '/auth',
+  path: '/auth',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuthenticatedIndexRoute = AuthenticatedIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
 const AuthenticatedAuditRoute = AuthenticatedAuditRouteImport.update({
-  id: '/_authenticated/audit',
+  id: '/audit',
   path: '/audit',
-  getParentRoute: () => rootRouteImport,
+  getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
 const AuthenticatedBomRoute = AuthenticatedBomRouteImport.update({
-  id: '/_authenticated/bom',
+  id: '/bom',
   path: '/bom',
-  getParentRoute: () => rootRouteImport,
+  getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
 const AuthenticatedDocumentsRoute = AuthenticatedDocumentsRouteImport.update({
-  id: '/_authenticated/documents',
+  id: '/documents',
   path: '/documents',
-  getParentRoute: () => rootRouteImport,
+  getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
 const AuthenticatedIntegrationsRoute =
   AuthenticatedIntegrationsRouteImport.update({
-    id: '/_authenticated/integrations',
+    id: '/integrations',
     path: '/integrations',
-    getParentRoute: () => rootRouteImport,
+    getParentRoute: () => AuthenticatedRouteRoute,
   } as any)
 const AuthenticatedItemsRoute = AuthenticatedItemsRouteImport.update({
-  id: '/_authenticated/items',
+  id: '/items',
   path: '/items',
-  getParentRoute: () => rootRouteImport,
+  getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
 const AuthenticatedRoutingsRoute = AuthenticatedRoutingsRouteImport.update({
-  id: '/_authenticated/routings',
+  id: '/routings',
   path: '/routings',
-  getParentRoute: () => rootRouteImport,
+  getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
 const AuthenticatedChangesKindRoute =
   AuthenticatedChangesKindRouteImport.update({
-    id: '/_authenticated/changes/$kind',
+    id: '/changes/$kind',
     path: '/changes/$kind',
-    getParentRoute: () => rootRouteImport,
+    getParentRoute: () => AuthenticatedRouteRoute,
   } as any)
 
 export interface FileRoutesByFullPath {
+  '/': typeof AuthenticatedIndexRoute
+  '/auth': typeof AuthRoute
   '/audit': typeof AuthenticatedAuditRoute
   '/bom': typeof AuthenticatedBomRoute
   '/documents': typeof AuthenticatedDocumentsRoute
   '/integrations': typeof AuthenticatedIntegrationsRoute
   '/items': typeof AuthenticatedItemsRoute
   '/routings': typeof AuthenticatedRoutingsRoute
-  '/': typeof AuthenticatedIndexRoute
   '/changes/$kind': typeof AuthenticatedChangesKindRoute
 }
 export interface FileRoutesByTo {
+  '/auth': typeof AuthRoute
   '/audit': typeof AuthenticatedAuditRoute
   '/bom': typeof AuthenticatedBomRoute
   '/documents': typeof AuthenticatedDocumentsRoute
@@ -83,6 +96,8 @@ export interface FileRoutesByTo {
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
+  '/_authenticated': typeof AuthenticatedRouteRouteWithChildren
+  '/auth': typeof AuthRoute
   '/_authenticated/audit': typeof AuthenticatedAuditRoute
   '/_authenticated/bom': typeof AuthenticatedBomRoute
   '/_authenticated/documents': typeof AuthenticatedDocumentsRoute
@@ -95,16 +110,18 @@ export interface FileRoutesById {
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
+    | '/'
+    | '/auth'
     | '/audit'
     | '/bom'
     | '/documents'
     | '/integrations'
     | '/items'
     | '/routings'
-    | '/'
     | '/changes/$kind'
   fileRoutesByTo: FileRoutesByTo
   to:
+    | '/auth'
     | '/audit'
     | '/bom'
     | '/documents'
@@ -115,6 +132,8 @@ export interface FileRouteTypes {
     | '/changes/$kind'
   id:
     | '__root__'
+    | '/_authenticated'
+    | '/auth'
     | '/_authenticated/audit'
     | '/_authenticated/bom'
     | '/_authenticated/documents'
@@ -126,6 +145,86 @@ export interface FileRouteTypes {
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
+  AuthenticatedRouteRoute: typeof AuthenticatedRouteRouteWithChildren
+  AuthRoute: typeof AuthRoute
+}
+
+declare module '@tanstack/react-router' {
+  interface FileRoutesByPath {
+    '/_authenticated': {
+      id: '/_authenticated'
+      path: ''
+      fullPath: '/'
+      preLoaderRoute: typeof AuthenticatedRouteRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/auth': {
+      id: '/auth'
+      path: '/auth'
+      fullPath: '/auth'
+      preLoaderRoute: typeof AuthRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/_authenticated/': {
+      id: '/_authenticated/'
+      path: '/'
+      fullPath: '/'
+      preLoaderRoute: typeof AuthenticatedIndexRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/audit': {
+      id: '/_authenticated/audit'
+      path: '/audit'
+      fullPath: '/audit'
+      preLoaderRoute: typeof AuthenticatedAuditRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/bom': {
+      id: '/_authenticated/bom'
+      path: '/bom'
+      fullPath: '/bom'
+      preLoaderRoute: typeof AuthenticatedBomRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/documents': {
+      id: '/_authenticated/documents'
+      path: '/documents'
+      fullPath: '/documents'
+      preLoaderRoute: typeof AuthenticatedDocumentsRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/integrations': {
+      id: '/_authenticated/integrations'
+      path: '/integrations'
+      fullPath: '/integrations'
+      preLoaderRoute: typeof AuthenticatedIntegrationsRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/items': {
+      id: '/_authenticated/items'
+      path: '/items'
+      fullPath: '/items'
+      preLoaderRoute: typeof AuthenticatedItemsRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/routings': {
+      id: '/_authenticated/routings'
+      path: '/routings'
+      fullPath: '/routings'
+      preLoaderRoute: typeof AuthenticatedRoutingsRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/changes/$kind': {
+      id: '/_authenticated/changes/$kind'
+      path: '/changes/$kind'
+      fullPath: '/changes/$kind'
+      preLoaderRoute: typeof AuthenticatedChangesKindRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+  }
+}
+
+interface AuthenticatedRouteRouteChildren {
   AuthenticatedAuditRoute: typeof AuthenticatedAuditRoute
   AuthenticatedBomRoute: typeof AuthenticatedBomRoute
   AuthenticatedDocumentsRoute: typeof AuthenticatedDocumentsRoute
@@ -136,68 +235,7 @@ export interface RootRouteChildren {
   AuthenticatedChangesKindRoute: typeof AuthenticatedChangesKindRoute
 }
 
-declare module '@tanstack/react-router' {
-  interface FileRoutesByPath {
-    '/_authenticated/': {
-      id: '/_authenticated/'
-      path: '/'
-      fullPath: '/'
-      preLoaderRoute: typeof AuthenticatedIndexRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/_authenticated/audit': {
-      id: '/_authenticated/audit'
-      path: '/audit'
-      fullPath: '/audit'
-      preLoaderRoute: typeof AuthenticatedAuditRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/_authenticated/bom': {
-      id: '/_authenticated/bom'
-      path: '/bom'
-      fullPath: '/bom'
-      preLoaderRoute: typeof AuthenticatedBomRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/_authenticated/documents': {
-      id: '/_authenticated/documents'
-      path: '/documents'
-      fullPath: '/documents'
-      preLoaderRoute: typeof AuthenticatedDocumentsRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/_authenticated/integrations': {
-      id: '/_authenticated/integrations'
-      path: '/integrations'
-      fullPath: '/integrations'
-      preLoaderRoute: typeof AuthenticatedIntegrationsRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/_authenticated/items': {
-      id: '/_authenticated/items'
-      path: '/items'
-      fullPath: '/items'
-      preLoaderRoute: typeof AuthenticatedItemsRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/_authenticated/routings': {
-      id: '/_authenticated/routings'
-      path: '/routings'
-      fullPath: '/routings'
-      preLoaderRoute: typeof AuthenticatedRoutingsRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/_authenticated/changes/$kind': {
-      id: '/_authenticated/changes/$kind'
-      path: '/changes/$kind'
-      fullPath: '/changes/$kind'
-      preLoaderRoute: typeof AuthenticatedChangesKindRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-  }
-}
-
-const rootRouteChildren: RootRouteChildren = {
+const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedAuditRoute: AuthenticatedAuditRoute,
   AuthenticatedBomRoute: AuthenticatedBomRoute,
   AuthenticatedDocumentsRoute: AuthenticatedDocumentsRoute,
@@ -206,6 +244,14 @@ const rootRouteChildren: RootRouteChildren = {
   AuthenticatedRoutingsRoute: AuthenticatedRoutingsRoute,
   AuthenticatedIndexRoute: AuthenticatedIndexRoute,
   AuthenticatedChangesKindRoute: AuthenticatedChangesKindRoute,
+}
+
+const AuthenticatedRouteRouteWithChildren =
+  AuthenticatedRouteRoute._addFileChildren(AuthenticatedRouteRouteChildren)
+
+const rootRouteChildren: RootRouteChildren = {
+  AuthenticatedRouteRoute: AuthenticatedRouteRouteWithChildren,
+  AuthRoute: AuthRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

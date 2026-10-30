@@ -15,7 +15,8 @@ import { reportLovableError } from "../lib/lovable-error-reporting";
 import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 import { AppSidebar } from "@/components/plm/app-sidebar";
 import { Toaster } from "@/components/ui/sonner";
-import { loadPersisted, resetDemo } from "@/lib/plm-store";
+import { supabase } from "@/integrations/supabase/client";
+import { useRouterState } from "@tanstack/react-router";
 import { RotateCcw } from "lucide-react";
 
 function NotFoundComponent() {
@@ -92,7 +93,8 @@ function RootShell({ children }: { children: ReactNode }) {
 
 function RootComponent() {
   const { queryClient } = Route.useRouteContext();
-  useEffect(() => loadPersisted(), []);
+  const path = useRouterState({ select: (r) => r.location.pathname });
+  if (path === "/auth") return (<QueryClientProvider client={queryClient}><Outlet /><Toaster /></QueryClientProvider>);
   return (
     <QueryClientProvider client={queryClient}>
       <SidebarProvider>
@@ -106,7 +108,7 @@ function RootComponent() {
                 <span className="flex items-center gap-1.5 text-success"><span className="h-1.5 w-1.5 rounded-full bg-success" />MES LINK</span>
                 <span className="flex items-center gap-1.5 text-success"><span className="h-1.5 w-1.5 rounded-full bg-success" />CORTA QC</span>
                 <span className="flex items-center gap-1.5 text-warning"><span className="h-1.5 w-1.5 rounded-full bg-warning" />UCC</span>
-                <button onClick={() => resetDemo()} className="flex items-center gap-1 text-muted-foreground hover:text-foreground" title="Reset demo data"><RotateCcw className="h-3 w-3" />Reset</button>
+                <button onClick={async () => { await supabase.auth.signOut(); window.location.href = "/auth"; }} className="flex items-center gap-1 text-muted-foreground hover:text-foreground" title="Sign out"><RotateCcw className="h-3 w-3" />Sign out</button>
               </div>
             </header>
             <main className="grid-bg flex-1 p-4 md:p-6"><Outlet /></main>
