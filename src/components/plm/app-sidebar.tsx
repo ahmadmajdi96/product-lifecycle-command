@@ -12,9 +12,9 @@ const groups = [
     { title: "Routings", url: "/routings", icon: RouteIcon },
   ] },
   { label: "Engineering Change", items: [
-    { title: "ECR · Requests", url: "/changes/ecr", icon: FileWarning },
-    { title: "ECO · Orders", url: "/changes/eco", icon: FileCheck2 },
-    { title: "ECN · Notices", url: "/changes/ecn", icon: Megaphone },
+    { title: "ECR · Requests", url: "/changes/ecr", kind: "ecr", icon: FileWarning },
+    { title: "ECO · Orders", url: "/changes/eco", kind: "eco", icon: FileCheck2 },
+    { title: "ECN · Notices", url: "/changes/ecn", kind: "ecn", icon: Megaphone },
   ] },
   { label: "Document Vault", items: [
     { title: "Controlled Docs", url: "/documents", icon: FolderLock },
@@ -51,7 +51,7 @@ export function AppSidebar() {
                   return (
                     <SidebarMenuItem key={it.url}>
                       <SidebarMenuButton asChild isActive={active} tooltip={it.title} className="data-[active=true]:border-l-2 data-[active=true]:border-primary data-[active=true]:text-primary">
-                        <Link to={it.url}><it.icon className="h-4 w-4" /><span>{it.title}</span></Link>
+                        <Link to={"kind" in it ? "/changes/$kind" : (it.url as "/")} params={"kind" in it ? { kind: it.kind } : undefined}><it.icon className="h-4 w-4" /><span>{it.title}</span></Link>
                       </SidebarMenuButton>
                     </SidebarMenuItem>
                   );
