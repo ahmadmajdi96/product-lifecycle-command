@@ -10,7 +10,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
 
-export const Route = createFileRoute("/items")({
+export const Route = createFileRoute("/_authenticated/items")({
   head: () => ({
     meta: [
       { title: "Item Master · Cortanex PLM" },

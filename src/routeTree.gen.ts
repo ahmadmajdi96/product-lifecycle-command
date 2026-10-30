@@ -9,201 +9,203 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
-import { Route as IndexRouteImport } from './routes/index'
-import { Route as AuditRouteImport } from './routes/audit'
-import { Route as BomRouteImport } from './routes/bom'
-import { Route as DocumentsRouteImport } from './routes/documents'
-import { Route as IntegrationsRouteImport } from './routes/integrations'
-import { Route as ItemsRouteImport } from './routes/items'
-import { Route as RoutingsRouteImport } from './routes/routings'
-import { Route as ChangesKindRouteImport } from './routes/changes.$kind'
+import { Route as AuthenticatedIndexRouteImport } from './routes/_authenticated/index'
+import { Route as AuthenticatedAuditRouteImport } from './routes/_authenticated/audit'
+import { Route as AuthenticatedBomRouteImport } from './routes/_authenticated/bom'
+import { Route as AuthenticatedDocumentsRouteImport } from './routes/_authenticated/documents'
+import { Route as AuthenticatedIntegrationsRouteImport } from './routes/_authenticated/integrations'
+import { Route as AuthenticatedItemsRouteImport } from './routes/_authenticated/items'
+import { Route as AuthenticatedRoutingsRouteImport } from './routes/_authenticated/routings'
+import { Route as AuthenticatedChangesKindRouteImport } from './routes/_authenticated/changes.$kind'
 
-const IndexRoute = IndexRouteImport.update({
-  id: '/',
+const AuthenticatedIndexRoute = AuthenticatedIndexRouteImport.update({
+  id: '/_authenticated/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
-const AuditRoute = AuditRouteImport.update({
-  id: '/audit',
+const AuthenticatedAuditRoute = AuthenticatedAuditRouteImport.update({
+  id: '/_authenticated/audit',
   path: '/audit',
   getParentRoute: () => rootRouteImport,
 } as any)
-const BomRoute = BomRouteImport.update({
-  id: '/bom',
+const AuthenticatedBomRoute = AuthenticatedBomRouteImport.update({
+  id: '/_authenticated/bom',
   path: '/bom',
   getParentRoute: () => rootRouteImport,
 } as any)
-const DocumentsRoute = DocumentsRouteImport.update({
-  id: '/documents',
+const AuthenticatedDocumentsRoute = AuthenticatedDocumentsRouteImport.update({
+  id: '/_authenticated/documents',
   path: '/documents',
   getParentRoute: () => rootRouteImport,
 } as any)
-const IntegrationsRoute = IntegrationsRouteImport.update({
-  id: '/integrations',
-  path: '/integrations',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const ItemsRoute = ItemsRouteImport.update({
-  id: '/items',
+const AuthenticatedIntegrationsRoute =
+  AuthenticatedIntegrationsRouteImport.update({
+    id: '/_authenticated/integrations',
+    path: '/integrations',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const AuthenticatedItemsRoute = AuthenticatedItemsRouteImport.update({
+  id: '/_authenticated/items',
   path: '/items',
   getParentRoute: () => rootRouteImport,
 } as any)
-const RoutingsRoute = RoutingsRouteImport.update({
-  id: '/routings',
+const AuthenticatedRoutingsRoute = AuthenticatedRoutingsRouteImport.update({
+  id: '/_authenticated/routings',
   path: '/routings',
   getParentRoute: () => rootRouteImport,
 } as any)
-const ChangesKindRoute = ChangesKindRouteImport.update({
-  id: '/changes/$kind',
-  path: '/changes/$kind',
-  getParentRoute: () => rootRouteImport,
-} as any)
+const AuthenticatedChangesKindRoute =
+  AuthenticatedChangesKindRouteImport.update({
+    id: '/_authenticated/changes/$kind',
+    path: '/changes/$kind',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 
 export interface FileRoutesByFullPath {
-  '/': typeof IndexRoute
-  '/audit': typeof AuditRoute
-  '/bom': typeof BomRoute
-  '/documents': typeof DocumentsRoute
-  '/integrations': typeof IntegrationsRoute
-  '/items': typeof ItemsRoute
-  '/routings': typeof RoutingsRoute
-  '/changes/$kind': typeof ChangesKindRoute
+  '/audit': typeof AuthenticatedAuditRoute
+  '/bom': typeof AuthenticatedBomRoute
+  '/documents': typeof AuthenticatedDocumentsRoute
+  '/integrations': typeof AuthenticatedIntegrationsRoute
+  '/items': typeof AuthenticatedItemsRoute
+  '/routings': typeof AuthenticatedRoutingsRoute
+  '/': typeof AuthenticatedIndexRoute
+  '/changes/$kind': typeof AuthenticatedChangesKindRoute
 }
 export interface FileRoutesByTo {
-  '/': typeof IndexRoute
-  '/audit': typeof AuditRoute
-  '/bom': typeof BomRoute
-  '/documents': typeof DocumentsRoute
-  '/integrations': typeof IntegrationsRoute
-  '/items': typeof ItemsRoute
-  '/routings': typeof RoutingsRoute
-  '/changes/$kind': typeof ChangesKindRoute
+  '/audit': typeof AuthenticatedAuditRoute
+  '/bom': typeof AuthenticatedBomRoute
+  '/documents': typeof AuthenticatedDocumentsRoute
+  '/integrations': typeof AuthenticatedIntegrationsRoute
+  '/items': typeof AuthenticatedItemsRoute
+  '/routings': typeof AuthenticatedRoutingsRoute
+  '/': typeof AuthenticatedIndexRoute
+  '/changes/$kind': typeof AuthenticatedChangesKindRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
-  '/': typeof IndexRoute
-  '/audit': typeof AuditRoute
-  '/bom': typeof BomRoute
-  '/documents': typeof DocumentsRoute
-  '/integrations': typeof IntegrationsRoute
-  '/items': typeof ItemsRoute
-  '/routings': typeof RoutingsRoute
-  '/changes/$kind': typeof ChangesKindRoute
+  '/_authenticated/audit': typeof AuthenticatedAuditRoute
+  '/_authenticated/bom': typeof AuthenticatedBomRoute
+  '/_authenticated/documents': typeof AuthenticatedDocumentsRoute
+  '/_authenticated/integrations': typeof AuthenticatedIntegrationsRoute
+  '/_authenticated/items': typeof AuthenticatedItemsRoute
+  '/_authenticated/routings': typeof AuthenticatedRoutingsRoute
+  '/_authenticated/': typeof AuthenticatedIndexRoute
+  '/_authenticated/changes/$kind': typeof AuthenticatedChangesKindRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
-    | '/'
     | '/audit'
     | '/bom'
     | '/documents'
     | '/integrations'
     | '/items'
     | '/routings'
+    | '/'
     | '/changes/$kind'
   fileRoutesByTo: FileRoutesByTo
   to:
-    | '/'
     | '/audit'
     | '/bom'
     | '/documents'
     | '/integrations'
     | '/items'
     | '/routings'
+    | '/'
     | '/changes/$kind'
   id:
     | '__root__'
-    | '/'
-    | '/audit'
-    | '/bom'
-    | '/documents'
-    | '/integrations'
-    | '/items'
-    | '/routings'
-    | '/changes/$kind'
+    | '/_authenticated/audit'
+    | '/_authenticated/bom'
+    | '/_authenticated/documents'
+    | '/_authenticated/integrations'
+    | '/_authenticated/items'
+    | '/_authenticated/routings'
+    | '/_authenticated/'
+    | '/_authenticated/changes/$kind'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
-  IndexRoute: typeof IndexRoute
-  AuditRoute: typeof AuditRoute
-  BomRoute: typeof BomRoute
-  DocumentsRoute: typeof DocumentsRoute
-  IntegrationsRoute: typeof IntegrationsRoute
-  ItemsRoute: typeof ItemsRoute
-  RoutingsRoute: typeof RoutingsRoute
-  ChangesKindRoute: typeof ChangesKindRoute
+  AuthenticatedAuditRoute: typeof AuthenticatedAuditRoute
+  AuthenticatedBomRoute: typeof AuthenticatedBomRoute
+  AuthenticatedDocumentsRoute: typeof AuthenticatedDocumentsRoute
+  AuthenticatedIntegrationsRoute: typeof AuthenticatedIntegrationsRoute
+  AuthenticatedItemsRoute: typeof AuthenticatedItemsRoute
+  AuthenticatedRoutingsRoute: typeof AuthenticatedRoutingsRoute
+  AuthenticatedIndexRoute: typeof AuthenticatedIndexRoute
+  AuthenticatedChangesKindRoute: typeof AuthenticatedChangesKindRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/': {
-      id: '/'
+    '/_authenticated/': {
+      id: '/_authenticated/'
       path: '/'
       fullPath: '/'
-      preLoaderRoute: typeof IndexRouteImport
+      preLoaderRoute: typeof AuthenticatedIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/audit': {
-      id: '/audit'
+    '/_authenticated/audit': {
+      id: '/_authenticated/audit'
       path: '/audit'
       fullPath: '/audit'
-      preLoaderRoute: typeof AuditRouteImport
+      preLoaderRoute: typeof AuthenticatedAuditRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/bom': {
-      id: '/bom'
+    '/_authenticated/bom': {
+      id: '/_authenticated/bom'
       path: '/bom'
       fullPath: '/bom'
-      preLoaderRoute: typeof BomRouteImport
+      preLoaderRoute: typeof AuthenticatedBomRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/documents': {
-      id: '/documents'
+    '/_authenticated/documents': {
+      id: '/_authenticated/documents'
       path: '/documents'
       fullPath: '/documents'
-      preLoaderRoute: typeof DocumentsRouteImport
+      preLoaderRoute: typeof AuthenticatedDocumentsRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/integrations': {
-      id: '/integrations'
+    '/_authenticated/integrations': {
+      id: '/_authenticated/integrations'
       path: '/integrations'
       fullPath: '/integrations'
-      preLoaderRoute: typeof IntegrationsRouteImport
+      preLoaderRoute: typeof AuthenticatedIntegrationsRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/items': {
-      id: '/items'
+    '/_authenticated/items': {
+      id: '/_authenticated/items'
       path: '/items'
       fullPath: '/items'
-      preLoaderRoute: typeof ItemsRouteImport
+      preLoaderRoute: typeof AuthenticatedItemsRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/routings': {
-      id: '/routings'
+    '/_authenticated/routings': {
+      id: '/_authenticated/routings'
       path: '/routings'
       fullPath: '/routings'
-      preLoaderRoute: typeof RoutingsRouteImport
+      preLoaderRoute: typeof AuthenticatedRoutingsRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/changes/$kind': {
-      id: '/changes/$kind'
+    '/_authenticated/changes/$kind': {
+      id: '/_authenticated/changes/$kind'
       path: '/changes/$kind'
       fullPath: '/changes/$kind'
-      preLoaderRoute: typeof ChangesKindRouteImport
+      preLoaderRoute: typeof AuthenticatedChangesKindRouteImport
       parentRoute: typeof rootRouteImport
     }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
-  IndexRoute: IndexRoute,
-  AuditRoute: AuditRoute,
-  BomRoute: BomRoute,
-  DocumentsRoute: DocumentsRoute,
-  IntegrationsRoute: IntegrationsRoute,
-  ItemsRoute: ItemsRoute,
-  RoutingsRoute: RoutingsRoute,
-  ChangesKindRoute: ChangesKindRoute,
+  AuthenticatedAuditRoute: AuthenticatedAuditRoute,
+  AuthenticatedBomRoute: AuthenticatedBomRoute,
+  AuthenticatedDocumentsRoute: AuthenticatedDocumentsRoute,
+  AuthenticatedIntegrationsRoute: AuthenticatedIntegrationsRoute,
+  AuthenticatedItemsRoute: AuthenticatedItemsRoute,
+  AuthenticatedRoutingsRoute: AuthenticatedRoutingsRoute,
+  AuthenticatedIndexRoute: AuthenticatedIndexRoute,
+  AuthenticatedChangesKindRoute: AuthenticatedChangesKindRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

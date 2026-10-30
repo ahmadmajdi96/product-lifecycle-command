@@ -7,7 +7,7 @@ import type { SyncJob } from "@/lib/plm-data";
 import { PageHeader, Panel, Status, Mono, th, td } from "@/components/plm/ui";
 import { Button } from "@/components/ui/button";
 
-export const Route = createFileRoute("/integrations")({
+export const Route = createFileRoute("/_authenticated/integrations")({
   head: () => ({
     meta: [
       { title: "Integration Hub · Cortanex PLM" },

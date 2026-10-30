@@ -1,9 +1,9 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { usePlm } from "@/lib/plm-store";
-import { ACTIVE_WOS, LIFECYCLES } from "@/lib/plm-data";
+import { LIFECYCLES } from "@/lib/plm-data";
 import { PageHeader, Kpi, Panel, Status, Mono, th, td } from "@/components/plm/ui";
 
-export const Route = createFileRoute("/")({
+export const Route = createFileRoute("/_authenticated/")({
   head: () => ({
     meta: [
       { title: "Command Overview · Cortanex PLM" },
@@ -21,6 +21,7 @@ function Overview() {
   const docs = usePlm((s) => s.docs);
   const syncs = usePlm((s) => s.syncs);
   const audit = usePlm((s) => s.audit);
+  const workOrders = usePlm((s) => s.workOrders);
   const open = changes.filter((c) => c.status !== "RELEASED" && c.status !== "REJECTED");
   const pendingEff = items.filter((i) => i.status === "APPROVED");
   return (
@@ -68,7 +69,7 @@ function Overview() {
           <table className="w-full text-sm">
             <thead><tr><th className={th}>WO</th><th className={th}>Item</th><th className={th}>Line</th><th className={th}>Progress</th></tr></thead>
             <tbody>
-              {ACTIVE_WOS.map((w) => (
+              {workOrders.map((w) => (
                 <tr key={w.wo} className="border-t border-border">
                   <td className={td}><Mono>{w.wo}</Mono></td><td className={td}><Mono className="text-primary">{w.item}</Mono></td><td className={td}><Mono>{w.line}</Mono></td>
                   <td className={td}><div className="flex items-center gap-2"><div className="h-1.5 w-32 rounded-sm bg-muted"><div className="h-1.5 rounded-sm bg-success" style={{ width: `${(w.done / w.qty) * 100}%` }} /></div><Mono>{w.done}/{w.qty}</Mono></div></td>

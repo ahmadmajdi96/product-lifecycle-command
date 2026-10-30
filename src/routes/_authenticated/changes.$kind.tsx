@@ -18,7 +18,7 @@ const META: Record<string, { kind: ChangeKind; title: string; code: string; desc
   ecn: { kind: "ECN", title: "Engineering Change Notices", code: "ECM-03 · ECN", desc: "Broadcast notices provisioning released master data to MES, CORTA QC and Unified Command Center." },
 };
 
-export const Route = createFileRoute("/changes/$kind")({
+export const Route = createFileRoute("/_authenticated/changes/$kind")({
   loader: ({ params }) => {
     if (!META[params.kind]) throw notFound();
     return META[params.kind];
@@ -69,7 +69,9 @@ function Detail({ c }: { c: Change }) {
   const [signRole, setSignRole] = useState<string | null>(null);
   const [reject, setReject] = useState(false);
   const all = usePlm((s) => s.changes);
-  const impact = computeImpact(c.affected, c.disposition);
+  const workOrders = usePlm((s) => s.workOrders);
+  const inventory = usePlm((s) => s.inventory);
+  const impact = computeImpact(c.affected, c.disposition, workOrders, inventory);
   const approved = c.approvals.filter((a) => a.decision === "APPROVED").length;
   const set = (p: Partial<Change>) => update((s) => ({ ...s, changes: s.changes.map((x) => (x.id === c.id ? { ...x, ...p } : x)) }));
   const locked = c.status === "RELEASED" || c.status === "REJECTED";
