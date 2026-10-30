@@ -42,7 +42,7 @@ export async function loadAll() {
     if (k === "syncs") q = q.order("at", { ascending: false });
     return q;
   }));
-  const next = empty() as Record<string, unknown[]>;
+  const next = empty() as unknown as Record<string, unknown[]>;
   res.forEach((r, i) => {
     if (r.error) toast.error(`Could not load ${keys[i]}: ${r.error.message}`);
     next[keys[i]] = ((r.data ?? []) as Record<string, unknown>[]).map(inn);
