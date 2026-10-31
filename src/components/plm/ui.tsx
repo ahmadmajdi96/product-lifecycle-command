@@ -7,6 +7,10 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { CURRENT_USER } from "@/lib/plm-store";
 import { ShieldCheck } from "lucide-react";
+import { RecordLink } from "./record-profiles";
+import { useServerFn } from "@tanstack/react-start";
+import { verifySignatureIdentity } from "@/lib/signature.functions";
+import { toast } from "sonner";
 
 export function PageHeader({ code, title, desc, actions }: { code: string; title: string; desc?: string; actions?: ReactNode }) {
   return (
@@ -52,7 +56,7 @@ export function Status({ value }: { value: Lifecycle | string }) {
 }
 
 export function Mono({ children, className }: { children: ReactNode; className?: string }) {
-  return <span className={cn("font-mono text-xs", className)}>{children}</span>;
+  return <span className={cn("font-mono text-xs", className)}>{typeof children === "string" ? <RecordLink text={children} /> : children}</span>;
 }
 
 export function Panel({ title, code, children, className, actions }: { title: string; code?: string; children: ReactNode; className?: string; actions?: ReactNode }) {
@@ -84,18 +88,26 @@ export function Kpi({ label, value, sub, tone: t = "primary" }: { label: string;
 export const th = "px-3 py-2 text-left font-mono text-[10px] font-semibold uppercase tracking-wider text-muted-foreground";
 export const td = "px-3 py-2 align-middle";
 
-/** 21 CFR Part 11 electronic signature: re-enter identity + meaning of signature. */
+/** Reauthenticate the current identity before committing a signature action. */
 export function ESignDialog({ open, onOpenChange, title, meaningOptions, onSign }: {
   open: boolean; onOpenChange: (o: boolean) => void; title: string; meaningOptions: string[]; onSign: (meaning: string) => void;
 }) {
   const [pw, setPw] = useState("");
   const [meaning, setMeaning] = useState(meaningOptions[0]);
+  const [busy, setBusy] = useState(false);
+  const verify = useServerFn(verifySignatureIdentity);
+  const commit = async () => {
+    setBusy(true);
+    try { await verify({ data: { password: pw } }); onSign(meaning); onOpenChange(false); setPw(""); }
+    catch (error) { toast.error(error instanceof Error ? error.message : "Identity verification failed"); }
+    finally { setBusy(false); }
+  };
   return (
     <Dialog open={open} onOpenChange={(o) => { onOpenChange(o); setPw(""); }}>
       <DialogContent>
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2"><ShieldCheck className="h-5 w-5 text-primary" /> Electronic Signature</DialogTitle>
-          <DialogDescription>{title} — 21 CFR Part 11 §11.200: signature requires identity re-verification and an explicit meaning.</DialogDescription>
+          <DialogDescription>{title} — confirm your identity and the meaning of this signature.</DialogDescription>
         </DialogHeader>
         <div className="space-y-3">
           <div><Label>Signer</Label><Input value={CURRENT_USER} disabled className="font-mono" /></div>
@@ -105,11 +117,11 @@ export function ESignDialog({ open, onOpenChange, title, meaningOptions, onSign 
               {meaningOptions.map((m) => <option key={m}>{m}</option>)}
             </select>
           </div>
-          <div><Label>Password</Label><Input type="password" value={pw} onChange={(e) => setPw(e.target.value)} placeholder="Re-enter password (min 4 chars)" /></div>
+          <div><Label>Password</Label><Input type="password" autoComplete="current-password" value={pw} onChange={(e) => setPw(e.target.value)} placeholder="Re-enter your account password" /></div>
         </div>
         <DialogFooter>
           <Button variant="outline" onClick={() => onOpenChange(false)}>Cancel</Button>
-          <Button disabled={pw.length < 4} onClick={() => { onSign(meaning); onOpenChange(false); setPw(""); }}>Sign & Commit</Button>
+          <Button disabled={!pw || busy} onClick={commit}>{busy ? "Verifying…" : "Sign & Commit"}</Button>
         </DialogFooter>
       </DialogContent>
     </Dialog>
