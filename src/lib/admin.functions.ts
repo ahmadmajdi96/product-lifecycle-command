@@ -20,7 +20,7 @@ export const createUserAccount = createServerFn({ method: "POST" })
     await assertAdmin(context.supabase as never, context.userId);
     const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
     const { data: created, error } = await supabaseAdmin.auth.admin.createUser({
-      email: data.email, password: data.password, email_confirm: true, user_metadata: { full_name: data.fullName || data.email.split("@")[0] },
+      email: data.email, password: data.password, email_confirm: false, user_metadata: { full_name: data.fullName || data.email.split("@")[0] },
     });
     if (error || !created.user) throw new Error(error?.message ?? "Could not create account");
     const id = created.user.id;

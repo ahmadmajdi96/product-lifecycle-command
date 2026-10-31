@@ -1,0 +1,4 @@
+alter table public.docs add column file_path text, add column file_name text, add column mime_type text;
+create policy "Read controlled document files" on storage.objects for select to authenticated using (bucket_id = 'controlled-documents');
+create policy "Upload controlled document files" on storage.objects for insert to authenticated with check (bucket_id = 'controlled-documents' and public.can_write(auth.uid()));
+create policy "Remove own unregistered files" on storage.objects for delete to authenticated using (bucket_id = 'controlled-documents' and owner_id = auth.uid()::text and not exists (select 1 from public.docs where file_path = name));

@@ -137,9 +137,12 @@ export type Database = {
       docs: {
         Row: {
           checked_out_by: string | null
+          file_name: string | null
+          file_path: string | null
           id: string
           kind: string
           linked_item: string | null
+          mime_type: string | null
           number: string
           rev: string
           size_kb: number
@@ -149,9 +152,12 @@ export type Database = {
         }
         Insert: {
           checked_out_by?: string | null
+          file_name?: string | null
+          file_path?: string | null
           id?: string
           kind: string
           linked_item?: string | null
+          mime_type?: string | null
           number: string
           rev?: string
           size_kb?: number
@@ -161,9 +167,12 @@ export type Database = {
         }
         Update: {
           checked_out_by?: string | null
+          file_name?: string | null
+          file_path?: string | null
           id?: string
           kind?: string
           linked_item?: string | null
+          mime_type?: string | null
           number?: string
           rev?: string
           size_kb?: number

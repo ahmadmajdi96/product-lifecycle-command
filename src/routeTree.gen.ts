@@ -18,6 +18,7 @@ import { Route as AuthenticatedDocumentsRouteImport } from './routes/_authentica
 import { Route as AuthenticatedIntegrationsRouteImport } from './routes/_authenticated/integrations'
 import { Route as AuthenticatedItemsRouteImport } from './routes/_authenticated/items'
 import { Route as AuthenticatedRoutingsRouteImport } from './routes/_authenticated/routings'
+import { Route as AuthenticatedUsersRouteImport } from './routes/_authenticated/users'
 import { Route as AuthenticatedChangesKindRouteImport } from './routes/_authenticated/changes.$kind'
 
 const AuthenticatedRouteRoute = AuthenticatedRouteRouteImport.update({
@@ -65,6 +66,11 @@ const AuthenticatedRoutingsRoute = AuthenticatedRoutingsRouteImport.update({
   path: '/routings',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
+const AuthenticatedUsersRoute = AuthenticatedUsersRouteImport.update({
+  id: '/users',
+  path: '/users',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
 const AuthenticatedChangesKindRoute =
   AuthenticatedChangesKindRouteImport.update({
     id: '/changes/$kind',
@@ -81,6 +87,7 @@ export interface FileRoutesByFullPath {
   '/integrations': typeof AuthenticatedIntegrationsRoute
   '/items': typeof AuthenticatedItemsRoute
   '/routings': typeof AuthenticatedRoutingsRoute
+  '/users': typeof AuthenticatedUsersRoute
   '/changes/$kind': typeof AuthenticatedChangesKindRoute
 }
 export interface FileRoutesByTo {
@@ -91,6 +98,7 @@ export interface FileRoutesByTo {
   '/integrations': typeof AuthenticatedIntegrationsRoute
   '/items': typeof AuthenticatedItemsRoute
   '/routings': typeof AuthenticatedRoutingsRoute
+  '/users': typeof AuthenticatedUsersRoute
   '/': typeof AuthenticatedIndexRoute
   '/changes/$kind': typeof AuthenticatedChangesKindRoute
 }
@@ -104,6 +112,7 @@ export interface FileRoutesById {
   '/_authenticated/integrations': typeof AuthenticatedIntegrationsRoute
   '/_authenticated/items': typeof AuthenticatedItemsRoute
   '/_authenticated/routings': typeof AuthenticatedRoutingsRoute
+  '/_authenticated/users': typeof AuthenticatedUsersRoute
   '/_authenticated/': typeof AuthenticatedIndexRoute
   '/_authenticated/changes/$kind': typeof AuthenticatedChangesKindRoute
 }
@@ -118,6 +127,7 @@ export interface FileRouteTypes {
     | '/integrations'
     | '/items'
     | '/routings'
+    | '/users'
     | '/changes/$kind'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -128,6 +138,7 @@ export interface FileRouteTypes {
     | '/integrations'
     | '/items'
     | '/routings'
+    | '/users'
     | '/'
     | '/changes/$kind'
   id:
@@ -140,6 +151,7 @@ export interface FileRouteTypes {
     | '/_authenticated/integrations'
     | '/_authenticated/items'
     | '/_authenticated/routings'
+    | '/_authenticated/users'
     | '/_authenticated/'
     | '/_authenticated/changes/$kind'
   fileRoutesById: FileRoutesById
@@ -214,6 +226,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedRoutingsRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/users': {
+      id: '/_authenticated/users'
+      path: '/users'
+      fullPath: '/users'
+      preLoaderRoute: typeof AuthenticatedUsersRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/changes/$kind': {
       id: '/_authenticated/changes/$kind'
       path: '/changes/$kind'
@@ -231,6 +250,7 @@ interface AuthenticatedRouteRouteChildren {
   AuthenticatedIntegrationsRoute: typeof AuthenticatedIntegrationsRoute
   AuthenticatedItemsRoute: typeof AuthenticatedItemsRoute
   AuthenticatedRoutingsRoute: typeof AuthenticatedRoutingsRoute
+  AuthenticatedUsersRoute: typeof AuthenticatedUsersRoute
   AuthenticatedIndexRoute: typeof AuthenticatedIndexRoute
   AuthenticatedChangesKindRoute: typeof AuthenticatedChangesKindRoute
 }
@@ -242,6 +262,7 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedIntegrationsRoute: AuthenticatedIntegrationsRoute,
   AuthenticatedItemsRoute: AuthenticatedItemsRoute,
   AuthenticatedRoutingsRoute: AuthenticatedRoutingsRoute,
+  AuthenticatedUsersRoute: AuthenticatedUsersRoute,
   AuthenticatedIndexRoute: AuthenticatedIndexRoute,
   AuthenticatedChangesKindRoute: AuthenticatedChangesKindRoute,
 }

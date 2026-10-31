@@ -9,5 +9,7 @@
 > the editor, so keep the branch in a working state.
 <!-- LOVABLE:END -->
 
-- PLM demo data lives in a client-side store (`src/lib/plm-store.ts`, seeded from `src/lib/plm-data.ts`, persisted to localStorage) — no backend yet; swap the store for Lovable Cloud tables when multi-user persistence is needed.
+- PLM data is persisted in Lovable Cloud; the client store is a shared cache with optimistic writes and error reloads, not localStorage demo storage.
+- Entity profiles use a shared dialog provider and linked identifiers so related records open consistently across all PLM pages.
+- Controlled files use private storage and short-lived signed URLs; password verification uses an authenticated server function before a signature action.
 - tsconfig has `noUncheckedIndexedAccess`, `exactOptionalPropertyTypes` and `noImplicitReturns` off to keep dense UI code readable.

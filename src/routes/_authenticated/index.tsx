@@ -2,6 +2,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { usePlm } from "@/lib/plm-store";
 import { LIFECYCLES } from "@/lib/plm-data";
 import { PageHeader, Kpi, Panel, Status, Mono, th, td } from "@/components/plm/ui";
+import { RecordLink } from "@/components/plm/record-profiles";
 
 export const Route = createFileRoute("/_authenticated/")({
   head: () => ({
@@ -56,7 +57,7 @@ function Overview() {
               {open.map((c) => (
                 <tr key={c.id} className="border-t border-border">
                   <td className={td}><Mono className="text-primary">{c.number}</Mono></td>
-                  <td className={td}>{c.title}</td>
+                  <td className={td}><RecordLink text={c.number}>{c.title}</RecordLink></td>
                   <td className={td}><Status value={c.priority} /></td>
                   <td className={td}><Mono>{c.approvals.filter((a) => a.decision === "APPROVED").length}/{c.approvals.length}</Mono></td>
                   <td className={td}><Status value={c.status} /></td>

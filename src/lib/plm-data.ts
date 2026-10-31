@@ -97,6 +97,9 @@ export interface Change {
 }
 
 export interface Doc {
+  filePath?: string;
+  fileName?: string;
+  mimeType?: string;
   id: string;
   number: string;
   title: string;

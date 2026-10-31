@@ -26,7 +26,7 @@ const emit = () => listeners.forEach((l) => l());
 
 const toSnake = (k: string) => (k === "user" ? "actor" : k.replace(/[A-Z]/g, (m) => "_" + m.toLowerCase()));
 const toCamel = (k: string) => (k === "actor" ? "user" : k.replace(/_([a-z])/g, (_, c) => c.toUpperCase()));
-const out = (row: Record<string, unknown>) => Object.fromEntries(Object.entries(row).filter(([, v]) => v !== undefined).map(([k, v]) => [toSnake(k), v]));
+const out = (row: Record<string, unknown>) => Object.fromEntries(Object.entries(row).map(([k, v]) => [toSnake(k), v === undefined ? null : v]));
 const inn = (row: Record<string, unknown>) => Object.fromEntries(Object.entries(row).map(([k, v]) => [toCamel(k), v === null ? undefined : v]));
 
 export function setCurrentUser(id: string, name: string) {
