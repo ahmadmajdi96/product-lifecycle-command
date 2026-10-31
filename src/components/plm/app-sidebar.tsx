@@ -1,5 +1,7 @@
 import { Link, useRouterState } from "@tanstack/react-router";
-import { Activity, Boxes, Network, Route as RouteIcon, FileWarning, FileCheck2, Megaphone, FolderLock, PlugZap, ScrollText, Cpu } from "lucide-react";
+import { Activity, Boxes, Network, Route as RouteIcon, FileWarning, FileCheck2, Megaphone, FolderLock, PlugZap, ScrollText, Cpu, Users } from "lucide-react";
+import { usePlm, CURRENT_USER_ID } from "@/lib/plm-store";
+import { RecordButton } from "./record-profiles";
 import {
   Sidebar, SidebarContent, SidebarGroup, SidebarGroupContent, SidebarGroupLabel, SidebarMenu, SidebarMenuButton, SidebarMenuItem, SidebarHeader, SidebarFooter, useSidebar,
 } from "@/components/ui/sidebar";
@@ -21,12 +23,14 @@ const groups = [
     { title: "Audit Trail", url: "/audit", icon: ScrollText },
   ] },
   { label: "System Integrations", items: [{ title: "Integration Hub", url: "/integrations", icon: PlugZap }] },
+  { label: "Command Access", items: [{ title: "Users & Profiles", url: "/users", icon: Users }] },
 ] as const;
 
 export function AppSidebar() {
   const { state } = useSidebar();
   const collapsed = state === "collapsed";
   const path = useRouterState({ select: (r) => r.location.pathname });
+  const profile = usePlm((s) => s.profiles.find((p) => p.id === CURRENT_USER_ID));
   return (
     <Sidebar collapsible="icon">
       <SidebarHeader className="border-b border-sidebar-border">
@@ -51,7 +55,7 @@ export function AppSidebar() {
                   return (
                     <SidebarMenuItem key={it.url}>
                       <SidebarMenuButton asChild isActive={active} tooltip={it.title} className="data-[active=true]:border-l-2 data-[active=true]:border-primary data-[active=true]:text-primary">
-                        {"kind" in it ? <Link to="/changes/$kind" params={{ kind: it.kind }}><it.icon className="h-4 w-4" /><span>{it.title}</span></Link> : <Link to={it.url as "/items"}><it.icon className="h-4 w-4" /><span>{it.title}</span></Link>}
+                        {"kind" in it ? <Link to="/changes/$kind" params={{ kind: it.kind }}><it.icon className="h-4 w-4" /><span>{it.title}</span></Link> : <Link to={it.url}><it.icon className="h-4 w-4" /><span>{it.title}</span></Link>}
                       </SidebarMenuButton>
                     </SidebarMenuItem>
                   );
@@ -62,7 +66,7 @@ export function AppSidebar() {
         ))}
       </SidebarContent>
       <SidebarFooter className="border-t border-sidebar-border">
-        {!collapsed && <div className="font-mono text-[10px] text-muted-foreground">AUTH · Command Access Hub<br />SESSION · A. Salameh</div>}
+        {!collapsed && <div className="break-words font-mono text-[10px] text-muted-foreground">SESSION · {profile ? <RecordButton record={{ kind: "profiles", id: profile.id }}>{profile.fullName || profile.email}</RecordButton> : "Signed out"}</div>}
       </SidebarFooter>
     </Sidebar>
   );

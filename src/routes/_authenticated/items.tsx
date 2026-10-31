@@ -2,7 +2,8 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
 import { toast } from "sonner";
 import { Plus, ChevronRight, GitBranch } from "lucide-react";
-import { usePlm, update, audit, uid, nextRev } from "@/lib/plm-store";
+import { usePlm, update, audit, uid, nextRev, CURRENT_USER } from "@/lib/plm-store";
+import { RecordLink } from "@/components/plm/record-profiles";
 import { ITEM_TYPES, LIFECYCLES, NEXT_STATE, type Item, type ItemType } from "@/lib/plm-data";
 import { PageHeader, Status, Mono, th, td, ESignDialog } from "@/components/plm/ui";
 import { Button } from "@/components/ui/button";
@@ -32,7 +33,8 @@ function Items() {
   const list = items.filter((i) => (type === "ALL" || i.type === type) && (phase === "ALL" || i.status === phase) && (i.number + i.name).toLowerCase().includes(q.toLowerCase()));
 
   const promote = (it: Item, meaning: string) => {
-    const to = NEXT_STATE[it.status]!;
+    const to = NEXT_STATE[it.status];
+    if (!to) return;
     update((s) => ({ ...s, items: s.items.map((x) => (x.id === it.id ? { ...x, status: to, effectiveTo: to === "OBSOLETE" ? new Date().toISOString().slice(0, 10) : x.effectiveTo } : x)) }));
     audit("E-SIGN", `${it.number} Rev ${it.rev}`, `${it.status} → ${to} · ${meaning}`, true);
     toast.success(`${it.number} → ${to}`);
@@ -66,14 +68,14 @@ function Items() {
             {list.map((i) => (
               <tr key={i.id} className="border-t border-border hover:bg-accent/30">
                 <td className={td}><Mono className="font-semibold text-primary">{i.number}</Mono></td>
-                <td className={td}>{i.name}{i.ctq && <div className="font-mono text-[10px] text-warning">CTQ · {i.ctq}</div>}</td>
+                <td className={td}><RecordLink text={i.name} />{i.ctq && <div className="font-mono text-[10px] text-warning">CTQ · {i.ctq}</div>}</td>
                 <td className={td}><Mono>{i.type}</Mono></td>
                 <td className={td}><Mono>{i.uom}</Mono></td>
                 <td className={td}><Mono className="rounded-sm bg-secondary px-1.5 py-0.5">{i.rev}</Mono></td>
                 <td className={td}><Status value={i.status} /></td>
                 <td className={td}><Mono>{i.effectiveFrom}{i.effectiveTo ? ` → ${i.effectiveTo}` : " → ∞"}</Mono></td>
                 <td className={td}><Mono>${i.cost.toFixed(2)}</Mono></td>
-                <td className={td}>{i.owner}</td>
+                <td className={td}><RecordLink text={i.owner} /></td>
                 <td className={td}>
                   <div className="flex justify-end gap-1">
                     {NEXT_STATE[i.status] && <Button size="sm" variant="outline" className="h-7 font-mono text-[10px]" onClick={() => setSigning(i)}>{NEXT_STATE[i.status]?.replace("_", " ")}<ChevronRight className="h-3 w-3" /></Button>}
@@ -96,7 +98,7 @@ function NewItem({ open, onOpenChange }: { open: boolean; onOpenChange: (o: bool
   const [f, setF] = useState({ number: "", name: "", type: "RAW" as ItemType, uom: "EA", cost: "0", effectiveFrom: new Date().toISOString().slice(0, 10) });
   const save = () => {
     if (!f.number || !f.name) return toast.error("Part number and name are required");
-    const it: Item = { id: uid(), number: f.number.toUpperCase(), name: f.name, type: f.type, uom: f.uom, rev: "A", status: "DRAFT", effectiveFrom: f.effectiveFrom, owner: "A. Salameh", cost: Number(f.cost) || 0 };
+    const it: Item = { id: uid(), number: f.number.toUpperCase(), name: f.name, type: f.type, uom: f.uom, rev: "A", status: "DRAFT", effectiveFrom: f.effectiveFrom, owner: CURRENT_USER, cost: Number(f.cost) || 0 };
     update((s) => ({ ...s, items: [it, ...s.items] }));
     audit("CREATE", `${it.number} Rev A`, "Item created in DRAFT");
     toast.success(`${it.number} created`);

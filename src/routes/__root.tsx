@@ -18,6 +18,9 @@ import { Toaster } from "@/components/ui/sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { useRouterState } from "@tanstack/react-router";
 import { RotateCcw } from "lucide-react";
+import { RecordProfiles } from "@/components/plm/record-profiles";
+import { Button } from "@/components/ui/button";
+import { useHub } from "@/lib/access";
 
 function NotFoundComponent() {
   return (
@@ -93,11 +96,21 @@ function RootShell({ children }: { children: ReactNode }) {
 
 function RootComponent() {
   const { queryClient } = Route.useRouteContext();
+  const router = useRouter();
+  const hub = useHub();
+  useEffect(() => {
+    const { data } = supabase.auth.onAuthStateChange((event) => {
+      if (!["SIGNED_IN", "SIGNED_OUT", "USER_UPDATED"].includes(event)) return;
+      void router.invalidate();
+      if (event !== "SIGNED_OUT") void queryClient.invalidateQueries();
+    });
+    return () => data.subscription.unsubscribe();
+  }, [router, queryClient]);
   const path = useRouterState({ select: (r) => r.location.pathname });
   if (path === "/auth") return (<QueryClientProvider client={queryClient}><Outlet /><Toaster /></QueryClientProvider>);
   return (
     <QueryClientProvider client={queryClient}>
-      <SidebarProvider>
+      <RecordProfiles><SidebarProvider>
         <div className="flex min-h-screen w-full">
           <AppSidebar />
           <div className="flex min-w-0 flex-1 flex-col">
@@ -105,16 +118,14 @@ function RootComponent() {
               <SidebarTrigger />
               <span className="font-mono text-[11px] uppercase tracking-widest text-muted-foreground">Cortanex MOS / PLM</span>
               <div className="ml-auto flex items-center gap-4 font-mono text-[10px] uppercase tracking-wider">
-                <span className="flex items-center gap-1.5 text-success"><span className="h-1.5 w-1.5 rounded-full bg-success" />MES LINK</span>
-                <span className="flex items-center gap-1.5 text-success"><span className="h-1.5 w-1.5 rounded-full bg-success" />CORTA QC</span>
-                <span className="flex items-center gap-1.5 text-warning"><span className="h-1.5 w-1.5 rounded-full bg-warning" />UCC</span>
-                <button onClick={async () => { await supabase.auth.signOut(); window.location.href = "/auth"; }} className="flex items-center gap-1 text-muted-foreground hover:text-foreground" title="Sign out"><RotateCcw className="h-3 w-3" />Sign out</button>
+                <Button asChild variant="link" className="h-auto p-0 font-mono text-[10px]"><Link to="/integrations">{hub.configured && hub.reachable ? "ACCESS HUB ONLINE" : "MOS · NOT CONNECTED"}</Link></Button>
+                <Button variant="ghost" size="sm" onClick={async () => { await supabase.auth.signOut(); window.location.href = "/auth"; }} title="Sign out"><RotateCcw className="h-3 w-3" />Sign out</Button>
               </div>
             </header>
             <main className="grid-bg flex-1 p-4 md:p-6"><Outlet /></main>
           </div>
         </div>
-      </SidebarProvider>
+      </SidebarProvider></RecordProfiles>
       <Toaster />
     </QueryClientProvider>
   );
