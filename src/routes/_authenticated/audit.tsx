@@ -4,6 +4,7 @@ import { ShieldCheck } from "lucide-react";
 import { usePlm } from "@/lib/plm-store";
 import { PageHeader, Mono, th, td } from "@/components/plm/ui";
 import { Input } from "@/components/ui/input";
+import { RecordLink } from "@/components/plm/record-profiles";
 
 export const Route = createFileRoute("/_authenticated/audit")({
   head: () => ({
@@ -32,7 +33,7 @@ function Audit() {
             {list.map((a) => (
               <tr key={a.id} className="border-t border-border">
                 <td className={td}><Mono>{a.at.slice(0, 19).replace("T", " ")}</Mono></td>
-                <td className={td}>{a.user}</td>
+                <td className={td}><RecordLink text={a.user} /></td>
                 <td className={td}><Mono className="text-primary">{a.action}</Mono></td>
                 <td className={td}><Mono>{a.entity}</Mono></td>
                 <td className={td}>{a.detail}</td>
