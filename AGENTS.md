@@ -13,3 +13,4 @@
 - Entity profiles use a shared dialog provider and linked identifiers so related records open consistently across all PLM pages.
 - Controlled files use private storage and short-lived signed URLs; password verification uses an authenticated server function before a signature action.
 - tsconfig has `noUncheckedIndexedAccess`, `exactOptionalPropertyTypes` and `noImplicitReturns` off to keep dense UI code readable.
+- Shared PLM presentation uses the reference MES theme tokens, sidebar, top bar and panel patterns; search opens existing record profiles without introducing a second data source.

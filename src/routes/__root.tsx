@@ -12,15 +12,14 @@ import { useEffect, type ReactNode } from "react";
 
 import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
-import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
+import { SidebarProvider } from "@/components/ui/sidebar";
 import { AppSidebar } from "@/components/plm/app-sidebar";
 import { Toaster } from "@/components/ui/sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { useRouterState } from "@tanstack/react-router";
-import { RotateCcw } from "lucide-react";
 import { RecordProfiles } from "@/components/plm/record-profiles";
 import { Button } from "@/components/ui/button";
-import { useHub } from "@/lib/access";
+import { TopBar } from "@/components/plm/top-bar";
 
 function NotFoundComponent() {
   return (
@@ -97,7 +96,6 @@ function RootShell({ children }: { children: ReactNode }) {
 function RootComponent() {
   const { queryClient } = Route.useRouteContext();
   const router = useRouter();
-  const hub = useHub();
   useEffect(() => {
     const { data } = supabase.auth.onAuthStateChange((event) => {
       if (!["SIGNED_IN", "SIGNED_OUT", "USER_UPDATED"].includes(event)) return;
@@ -114,15 +112,8 @@ function RootComponent() {
         <div className="flex min-h-screen w-full">
           <AppSidebar />
           <div className="flex min-w-0 flex-1 flex-col">
-            <header className="sticky top-0 z-20 flex h-11 items-center gap-3 border-b border-border bg-background/95 px-3 backdrop-blur">
-              <SidebarTrigger />
-              <span className="font-mono text-[11px] uppercase tracking-widest text-muted-foreground">Cortanex MOS / PLM</span>
-              <div className="ml-auto flex items-center gap-4 font-mono text-[10px] uppercase tracking-wider">
-                <Button asChild variant="link" className="h-auto p-0 font-mono text-[10px]"><Link to="/integrations">{hub.configured && hub.reachable ? "ACCESS HUB ONLINE" : "MOS · NOT CONNECTED"}</Link></Button>
-                <Button variant="ghost" size="sm" onClick={async () => { await supabase.auth.signOut(); window.location.href = "/auth"; }} title="Sign out"><RotateCcw className="h-3 w-3" />Sign out</Button>
-              </div>
-            </header>
-            <main className="grid-bg flex-1 p-4 md:p-6"><Outlet /></main>
+            <TopBar />
+            <main className="mes-content min-w-0 flex-1 p-4 sm:p-6"><Outlet /></main>
           </div>
         </div>
       </SidebarProvider></RecordProfiles>

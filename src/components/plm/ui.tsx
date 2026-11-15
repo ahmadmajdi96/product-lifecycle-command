@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { CURRENT_USER } from "@/lib/plm-store";
-import { ShieldCheck } from "lucide-react";
+import { ShieldCheck, Activity, ArrowUpRight } from "lucide-react";
 import { RecordLink } from "./record-profiles";
 import { useServerFn } from "@tanstack/react-start";
 import { verifySignatureIdentity } from "@/lib/signature.functions";
@@ -14,11 +14,11 @@ import { toast } from "sonner";
 
 export function PageHeader({ code, title, desc, actions }: { code: string; title: string; desc?: string; actions?: ReactNode }) {
   return (
-    <div className="flex flex-wrap items-end justify-between gap-4 border-b border-border pb-4">
-      <div>
-        <div className="font-mono text-[11px] uppercase tracking-widest text-primary">{code}</div>
-        <h1 className="mt-1 text-2xl font-bold tracking-tight">{title}</h1>
-        {desc && <p className="mt-1 max-w-3xl text-sm text-muted-foreground">{desc}</p>}
+    <div className="flex flex-wrap items-end justify-between gap-3">
+      <div className="min-w-0">
+        <h1 className="font-display text-2xl font-semibold">{title}</h1>
+        <p className="mt-1 text-sm text-muted-foreground">{code}</p>
+        {desc && <p className="sr-only">{desc}</p>}
       </div>
       {actions && <div className="flex flex-wrap gap-2">{actions}</div>}
     </div>
@@ -49,7 +49,7 @@ const tone: Record<string, string> = {
 
 export function Status({ value }: { value: Lifecycle | string }) {
   return (
-    <span className={cn("inline-flex items-center whitespace-nowrap rounded-sm border px-1.5 py-0.5 font-mono text-[10px] font-semibold uppercase tracking-wider", tone[value] ?? "border-border")}>
+    <span className={cn("inline-flex items-center whitespace-nowrap rounded-full border px-2 py-0.5 text-[10px] font-medium uppercase tracking-wider", tone[value] ?? "border-border")}>
       {String(value).replace("_", " ")}
     </span>
   );
@@ -61,15 +61,15 @@ export function Mono({ children, className }: { children: ReactNode; className?:
 
 export function Panel({ title, code, children, className, actions }: { title: string; code?: string; children: ReactNode; className?: string; actions?: ReactNode }) {
   return (
-    <section className={cn("rounded-md border border-border bg-card", className)}>
-      <header className="flex items-center justify-between border-b border-border px-4 py-2">
-        <div className="flex items-baseline gap-2">
-          <h2 className="text-sm font-semibold uppercase tracking-wide">{title}</h2>
+    <section className={cn("glass-panel min-w-0 rounded-2xl", className)}>
+      <header className="flex flex-wrap items-center justify-between gap-2 px-5 pt-5">
+        <div className="flex min-w-0 flex-wrap items-baseline gap-2">
+          <h2 className="text-sm font-semibold">{title}</h2>
           {code && <span className="font-mono text-[10px] text-muted-foreground">{code}</span>}
         </div>
         {actions}
       </header>
-      <div className="p-4">{children}</div>
+      <div className="overflow-x-auto p-5 pt-3">{children}</div>
     </section>
   );
 }
@@ -77,10 +77,10 @@ export function Panel({ title, code, children, className, actions }: { title: st
 export function Kpi({ label, value, sub, tone: t = "primary" }: { label: string; value: ReactNode; sub?: string; tone?: "primary" | "warning" | "destructive" | "success" }) {
   const c = { primary: "text-primary", warning: "text-warning", destructive: "text-destructive", success: "text-success" }[t];
   return (
-    <div className="rounded-md border border-border bg-card p-4">
-      <div className="font-mono text-[10px] uppercase tracking-widest text-muted-foreground">{label}</div>
-      <div className={cn("mt-2 font-mono text-3xl font-bold", c)}>{value}</div>
-      {sub && <div className="mt-1 text-xs text-muted-foreground">{sub}</div>}
+    <div className={cn("glass-panel mes-kpi relative overflow-hidden rounded-2xl p-4", `mes-kpi-${t}`)}>
+      <div className="relative"><div className="flex items-start justify-between gap-2"><span className="text-[11px] uppercase tracking-[0.16em] text-muted-foreground">{label}</span><Activity className={cn("h-4 w-4 shrink-0", c)} /></div>
+      <div className="mt-3 font-mono text-3xl font-semibold">{value}</div>
+      {sub && <div className="mt-1 flex items-start gap-1 text-[11px] text-muted-foreground"><ArrowUpRight className="h-3 w-3 shrink-0 text-success" /><span>{sub}</span></div>}</div>
     </div>
   );
 }
