@@ -8,7 +8,7 @@ import {
   Scripts,
   type ErrorComponentProps,
 } from "@tanstack/react-router";
-import { useEffect, type ReactNode } from "react";
+import { useEffect, useState, type ReactNode } from "react";
 
 import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
@@ -19,6 +19,9 @@ import { supabase } from "@/integrations/supabase/client";
 import { useRouterState } from "@tanstack/react-router";
 import { RecordProfiles } from "@/components/plm/record-profiles";
 import { Button } from "@/components/ui/button";
+import { DefinitionWorkspace, workspaceOptions } from "@/components/plm/definition-workspace";
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { useQuery } from "@tanstack/react-query";
 import { TopBar } from "@/components/plm/top-bar";
 
 function NotFoundComponent() {
@@ -93,6 +96,14 @@ function RootShell({ children }: { children: ReactNode }) {
   );
 }
 
+function DefinitionProfile() {
+  const { data } = useQuery(workspaceOptions);
+  const [id, setId] = useState("");
+  useEffect(() => { const receive = (e: Event) => setId((e as CustomEvent<string>).detail); window.addEventListener("plm:open-definition", receive); return () => window.removeEventListener("plm:open-definition", receive); }, []);
+  const revision = data?.revisions.find(r => r.id === id);
+  const entity = data?.entities.find(e => e.id === revision?.entity_id);
+  return <Dialog open={!!entity} onOpenChange={o => { if (!o) setId(""); }}><DialogContent className="max-h-[90vh] max-w-6xl overflow-y-auto"><DialogHeader><DialogTitle>{entity?.code} · {entity?.name}</DialogTitle></DialogHeader>{entity && revision && <DefinitionWorkspace key={id} kind={entity.kind} initialRevisionId={id} />}</DialogContent></Dialog>;
+}
 function RootComponent() {
   const { queryClient } = Route.useRouteContext();
   const router = useRouter();
@@ -122,7 +133,7 @@ function RootComponent() {
           </div>
         </div>
       </SidebarProvider></RecordProfiles>
-      <Toaster />
+      <DefinitionProfile /><Toaster />
     </QueryClientProvider>
   );
 }

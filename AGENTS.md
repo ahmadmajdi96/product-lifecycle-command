@@ -19,3 +19,5 @@
 - New user-created workspaces are sandbox-only; production scope and controlled actions require verified Access Hub authority and never inherit local administrator privileges.
 - Appendix A governs package workflow (Draft/In review/Approved/Released); publication, consumer acceptance and effectivity are separate, resolving the WP7 lifecycle wording conflict.
 - Password recovery uses a public reset page and the shared root auth listener to capture recovery sessions; ordinary sign-in never substitutes for a recovery link.
+
+- Global search and activity notifications reuse scoped workspace reads and open exact revision dialogs; notification read state is per-user browser-local, not an approval or manufacturing authority.

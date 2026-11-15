@@ -1,4 +1,5 @@
 # Remaining PLM work
+- [ ] Current request: MES search/notifications, sandbox samples, and desktop/mobile QA of every page (maximum seven credits).
 - [ ] Implement the uploaded ManuQube PLMS brief (WP1–WP9), preserving existing records and MES styling.
 - [ ] WP1: Foundation delivered; remaining classification schemas, conversion approval, production scope provisioning and effectivity UI.
 - [ ] WP2: Decimal/output/component/backend-cycle foundation delivered; full tree/redline, substitution and recipe reconciliation remain.
