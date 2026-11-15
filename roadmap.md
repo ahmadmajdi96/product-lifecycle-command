@@ -1,4 +1,5 @@
 # Remaining PLM work
+- [x] Current request: MES-style search/activity notifications, 17 persisted sandbox drafts, and desktop/mobile page QA; exact record opening and mark-read checked, 21 safety tests passed. Notification read state is browser-local; external integrations remain unconfigured.
 - [ ] Implement the uploaded ManuQube PLMS brief (WP1–WP9), preserving existing records and MES styling.
 - [ ] WP1: Foundation delivered; remaining classification schemas, conversion approval, production scope provisioning and effectivity UI.
 - [ ] WP2: Decimal/output/component/backend-cycle foundation delivered; full tree/redline, substitution and recipe reconciliation remain.
