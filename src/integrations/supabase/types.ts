@@ -1263,6 +1263,18 @@ export type Database = {
         Args: { _org: string; _site?: string }
         Returns: boolean
       }
+      plm_receive_ack: { Args: { _body: Json }; Returns: string }
+      plm_register_file: {
+        Args: {
+          _hash: string
+          _mime: string
+          _name: string
+          _path: string
+          _revision: string
+          _size: number
+        }
+        Returns: string
+      }
       plm_sandbox_workspace: { Args: { _name: string }; Returns: string }
       plm_validate_payload: {
         Args: {
