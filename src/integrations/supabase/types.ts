@@ -678,6 +678,45 @@ export type Database = {
           },
         ]
       }
+      plm_file_verifications: {
+        Row: {
+          expires_at: string
+          id: string
+          mime_type: string
+          original_name: string
+          revision_id: string
+          sha256: string
+          size_bytes: number
+          storage_path: string
+          used_at: string | null
+          user_id: string
+        }
+        Insert: {
+          expires_at: string
+          id?: string
+          mime_type: string
+          original_name: string
+          revision_id: string
+          sha256: string
+          size_bytes: number
+          storage_path: string
+          used_at?: string | null
+          user_id: string
+        }
+        Update: {
+          expires_at?: string
+          id?: string
+          mime_type?: string
+          original_name?: string
+          revision_id?: string
+          sha256?: string
+          size_bytes?: number
+          storage_path?: string
+          used_at?: string | null
+          user_id?: string
+        }
+        Relationships: []
+      }
       plm_inbound_attempts: {
         Row: {
           consumer: string
