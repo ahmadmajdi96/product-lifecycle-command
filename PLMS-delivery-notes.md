@@ -9,7 +9,7 @@
 - Stable operation IDs, reorder predecessor reconstruction and backend material/document reference checks.
 - Confirmed transactional draft creation/save/copy/submit with expected versions, real SHA-256 content hashes and transactional actor/reason/correlation audit.
 - Independent review authorization path, hash-bound decisions, approval invalidation after edits, retained evidence and direct write denial.
-- Immutable PDF/PNG/JPEG registration with server-detected format, 20 MB limit, SHA-256 verification receipt and bound document hash; scoped short-lived signed retrieval and atomic checkout/check-in.
+- Immutable PDF/PNG/JPEG registration with server-detected format, 20 MB limit, SHA-256 verification receipt and bound document hash; scoped short-lived signed retrieval, inline image/PDF preview with revision watermark and atomic checkout/check-in.
 - Exact revision references for change requests and draft production packages, readiness gates that remain Unknown/Blocked when evidence is absent.
 - Transactional release/publication outbox, delivery attempts, scoped signed acknowledgement endpoint, retained inbound attempts, deduplication/quarantine commands.
 - Effective-definition retrieval endpoint with connector authentication, organization/site checks and ambiguity rejection.
@@ -29,7 +29,7 @@ External routes:
 ## Observed evidence
 - Signed-in browser: created a synthetic manufactured item through the five-step wizard, refreshed and read it back, saved specification content, copied a new revision, requested review and confirmed self-review was disabled.
 - Signed-in direct database checks: concurrent normalized code creation accepted exactly one request; stale expected version rejected; unauthorized organization rejected; unsupported unit and direct branching rejected; revision copy retained source; audit committed; direct mutation/evidence deletion/legacy bypass denied.
-- Signed-in document flow: created a document draft, uploaded a synthetic PNG, verified/hash-bound it server-side and read the retained metadata back through the UI.
+- Signed-in document flow: created a document draft, uploaded a synthetic PNG, verified/hash-bound it server-side, rendered its private image preview and performed checkout/check-in through the UI.
 - All updated content pages rendered, with no browser runtime errors in the observed authoring flow. Narrow item page had no document-level horizontal overflow.
 - Unit tests cover normalization, full cycle path, stable reorder references, branch denial, identity independence, stale versions, future effectivity, ambiguity, technical versus business receipt, rejecting consumer and unknown commissioning. These pure tests are not a substitute for full production acceptance.
 - Production acknowledgement flow was not exercised; unconfigured endpoint correctly returned 503.
@@ -47,7 +47,7 @@ Implementation gaps still requiring development:
 - Classification-specific specification schemas, governed unit/conversion approval UI, site/variant effectivity management and legacy migration review.
 - Full BOM tree/redline, substitute governance, recipe reconciliation and approved material-free applicability commands.
 - Full exact operation-to-EMS mapping, document/quality link editor, bounded rework controls and copy-time graph-ID remapping.
-- Complete document check-in/new-file revision workflow, additional configured media formats, PDF/image inline controlled preview and organization-approved retention policy.
+- Complete document check-in/new-file revision workflow, additional configured media formats and organization-approved retention policy; inline PNG preview was observed, PDF rendering remains unverified.
 - Atomic ECR→ECO→ECN transition, actual impact query, remaining-WIP amendment delivery and complete release dependency ordering.
 - Manifest assembly/approval with verified external references and applicable N/A decisions; freshness-aware readiness evaluation beyond honest blocker rows.
 - Active outbox delivery worker, bounded retry/reconciliation UI, complete external reference ingestion and configured-consumer negative/duplicate/out-of-order integration tests.

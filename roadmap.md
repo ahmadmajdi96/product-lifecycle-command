@@ -3,7 +3,7 @@
 - [ ] WP1: Foundation delivered; remaining classification schemas, conversion approval, production scope provisioning and effectivity UI.
 - [ ] WP2: Decimal/output/component/backend-cycle foundation delivered; full tree/redline, substitution and recipe reconciliation remain.
 - [ ] WP3: Stable linear/reorder foundation delivered; exact EMS mapping, quality/document link editing, rework and copy remapping remain.
-- [ ] WP4: Verified/hash-bound files and atomic locks delivered; inline preview, full new-file check-in and formal retention remain.
+- [ ] WP4: Verified/hash-bound files, inline preview and atomic locks delivered; full new-file check-in and formal retention remain.
 - [ ] WP5: Controlled transaction/security foundation delivered; Access Hub contract, full review matrix and production release sequencing remain.
 - [ ] WP6: Exact revision drafts delivered; atomic ECR/ECO/ECN transitions and real MES impact/amendment integration remain.
 - [ ] WP7: Draft exact-reference packages and honest gates delivered; verified assembly, applicability approval and freshness-aware evaluation remain.
@@ -14,7 +14,7 @@
 - [x] Match MES styling and replace placeholder session details.
 - [x] Scoped own-profile edits; removed competing local role/password authority.
 - [ ] Add linked profiles for engineering records, work orders, and work centers.
-- [ ] Store uploaded documents and show actual previews.
+- [x] Store verified documents and render private inline preview; full lifecycle work remains in WP4.
 - [ ] Verify identity before electronic signatures.
 - [x] Verify persisted sandbox authoring, file registration and negative database checks; broader acceptance remains open above.
 - [ ] Connect Command Access Hub (requires its URL and PLM API key).
