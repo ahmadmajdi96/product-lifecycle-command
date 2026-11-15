@@ -17,8 +17,10 @@ import { Route as AuthenticatedBomRouteImport } from './routes/_authenticated/bo
 import { Route as AuthenticatedDocumentsRouteImport } from './routes/_authenticated/documents'
 import { Route as AuthenticatedIntegrationsRouteImport } from './routes/_authenticated/integrations'
 import { Route as AuthenticatedItemsRouteImport } from './routes/_authenticated/items'
+import { Route as AuthenticatedPackagesRouteImport } from './routes/_authenticated/packages'
 import { Route as AuthenticatedRoutingsRouteImport } from './routes/_authenticated/routings'
 import { Route as AuthenticatedUsersRouteImport } from './routes/_authenticated/users'
+import { Route as AuthenticatedWorkCentersRouteImport } from './routes/_authenticated/work-centers'
 import { Route as AuthenticatedChangesKindRouteImport } from './routes/_authenticated/changes.$kind'
 
 const AuthenticatedRouteRoute = AuthenticatedRouteRouteImport.update({
@@ -61,6 +63,11 @@ const AuthenticatedItemsRoute = AuthenticatedItemsRouteImport.update({
   path: '/items',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
+const AuthenticatedPackagesRoute = AuthenticatedPackagesRouteImport.update({
+  id: '/packages',
+  path: '/packages',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
 const AuthenticatedRoutingsRoute = AuthenticatedRoutingsRouteImport.update({
   id: '/routings',
   path: '/routings',
@@ -71,6 +78,12 @@ const AuthenticatedUsersRoute = AuthenticatedUsersRouteImport.update({
   path: '/users',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
+const AuthenticatedWorkCentersRoute =
+  AuthenticatedWorkCentersRouteImport.update({
+    id: '/work-centers',
+    path: '/work-centers',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
 const AuthenticatedChangesKindRoute =
   AuthenticatedChangesKindRouteImport.update({
     id: '/changes/$kind',
@@ -86,8 +99,10 @@ export interface FileRoutesByFullPath {
   '/documents': typeof AuthenticatedDocumentsRoute
   '/integrations': typeof AuthenticatedIntegrationsRoute
   '/items': typeof AuthenticatedItemsRoute
+  '/packages': typeof AuthenticatedPackagesRoute
   '/routings': typeof AuthenticatedRoutingsRoute
   '/users': typeof AuthenticatedUsersRoute
+  '/work-centers': typeof AuthenticatedWorkCentersRoute
   '/changes/$kind': typeof AuthenticatedChangesKindRoute
 }
 export interface FileRoutesByTo {
@@ -97,8 +112,10 @@ export interface FileRoutesByTo {
   '/documents': typeof AuthenticatedDocumentsRoute
   '/integrations': typeof AuthenticatedIntegrationsRoute
   '/items': typeof AuthenticatedItemsRoute
+  '/packages': typeof AuthenticatedPackagesRoute
   '/routings': typeof AuthenticatedRoutingsRoute
   '/users': typeof AuthenticatedUsersRoute
+  '/work-centers': typeof AuthenticatedWorkCentersRoute
   '/': typeof AuthenticatedIndexRoute
   '/changes/$kind': typeof AuthenticatedChangesKindRoute
 }
@@ -111,8 +128,10 @@ export interface FileRoutesById {
   '/_authenticated/documents': typeof AuthenticatedDocumentsRoute
   '/_authenticated/integrations': typeof AuthenticatedIntegrationsRoute
   '/_authenticated/items': typeof AuthenticatedItemsRoute
+  '/_authenticated/packages': typeof AuthenticatedPackagesRoute
   '/_authenticated/routings': typeof AuthenticatedRoutingsRoute
   '/_authenticated/users': typeof AuthenticatedUsersRoute
+  '/_authenticated/work-centers': typeof AuthenticatedWorkCentersRoute
   '/_authenticated/': typeof AuthenticatedIndexRoute
   '/_authenticated/changes/$kind': typeof AuthenticatedChangesKindRoute
 }
@@ -126,8 +145,10 @@ export interface FileRouteTypes {
     | '/documents'
     | '/integrations'
     | '/items'
+    | '/packages'
     | '/routings'
     | '/users'
+    | '/work-centers'
     | '/changes/$kind'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -137,8 +158,10 @@ export interface FileRouteTypes {
     | '/documents'
     | '/integrations'
     | '/items'
+    | '/packages'
     | '/routings'
     | '/users'
+    | '/work-centers'
     | '/'
     | '/changes/$kind'
   id:
@@ -150,8 +173,10 @@ export interface FileRouteTypes {
     | '/_authenticated/documents'
     | '/_authenticated/integrations'
     | '/_authenticated/items'
+    | '/_authenticated/packages'
     | '/_authenticated/routings'
     | '/_authenticated/users'
+    | '/_authenticated/work-centers'
     | '/_authenticated/'
     | '/_authenticated/changes/$kind'
   fileRoutesById: FileRoutesById
@@ -219,6 +244,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedItemsRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/packages': {
+      id: '/_authenticated/packages'
+      path: '/packages'
+      fullPath: '/packages'
+      preLoaderRoute: typeof AuthenticatedPackagesRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/routings': {
       id: '/_authenticated/routings'
       path: '/routings'
@@ -231,6 +263,13 @@ declare module '@tanstack/react-router' {
       path: '/users'
       fullPath: '/users'
       preLoaderRoute: typeof AuthenticatedUsersRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/work-centers': {
+      id: '/_authenticated/work-centers'
+      path: '/work-centers'
+      fullPath: '/work-centers'
+      preLoaderRoute: typeof AuthenticatedWorkCentersRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
     '/_authenticated/changes/$kind': {
@@ -249,8 +288,10 @@ interface AuthenticatedRouteRouteChildren {
   AuthenticatedDocumentsRoute: typeof AuthenticatedDocumentsRoute
   AuthenticatedIntegrationsRoute: typeof AuthenticatedIntegrationsRoute
   AuthenticatedItemsRoute: typeof AuthenticatedItemsRoute
+  AuthenticatedPackagesRoute: typeof AuthenticatedPackagesRoute
   AuthenticatedRoutingsRoute: typeof AuthenticatedRoutingsRoute
   AuthenticatedUsersRoute: typeof AuthenticatedUsersRoute
+  AuthenticatedWorkCentersRoute: typeof AuthenticatedWorkCentersRoute
   AuthenticatedIndexRoute: typeof AuthenticatedIndexRoute
   AuthenticatedChangesKindRoute: typeof AuthenticatedChangesKindRoute
 }
@@ -261,8 +302,10 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedDocumentsRoute: AuthenticatedDocumentsRoute,
   AuthenticatedIntegrationsRoute: AuthenticatedIntegrationsRoute,
   AuthenticatedItemsRoute: AuthenticatedItemsRoute,
+  AuthenticatedPackagesRoute: AuthenticatedPackagesRoute,
   AuthenticatedRoutingsRoute: AuthenticatedRoutingsRoute,
   AuthenticatedUsersRoute: AuthenticatedUsersRoute,
+  AuthenticatedWorkCentersRoute: AuthenticatedWorkCentersRoute,
   AuthenticatedIndexRoute: AuthenticatedIndexRoute,
   AuthenticatedChangesKindRoute: AuthenticatedChangesKindRoute,
 }
