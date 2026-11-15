@@ -8,8 +8,12 @@ import { Input } from "@/components/ui/input";
 import { CURRENT_USER_ID, usePlm } from "@/lib/plm-store";
 import { supabase } from "@/integrations/supabase/client";
 import { RecordButton } from "./record-profiles";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { workspaceOptions } from "./definition-workspace";
 
 export function TopBar() {
+  const cache = useQueryClient();
+  const definitions = useQuery(workspaceOptions);
   const state = usePlm((s) => s);
   const profile = state.profiles.find((p) => p.id === CURRENT_USER_ID);
   const [open, setOpen] = useState(false);
@@ -37,9 +41,9 @@ export function TopBar() {
       <div className="ml-auto flex min-w-0 items-center gap-2">
         <Button variant="outline" aria-label="Search everything" onClick={() => setOpen(true)} className="h-9 gap-2 rounded-lg border-border/60 bg-card/60 px-2.5 text-muted-foreground hover:border-primary/50 hover:bg-card md:w-64"><Search className="h-3.5 w-3.5" /><span className="hidden flex-1 text-left md:inline">Search everything…</span><kbd className="hidden rounded border border-border/60 px-1.5 font-mono text-[10px] md:inline">Ctrl K</kbd></Button>
         {profile && <div className="flex min-w-0 items-center gap-2 rounded-lg border border-border/60 bg-card/60 px-2 py-1"><div className="mes-brand grid h-6 w-6 shrink-0 place-items-center rounded-md text-[10px] font-bold text-primary-foreground">{initials}</div><div className="hidden max-w-40 text-xs leading-tight sm:block"><RecordButton record={{ kind: "profiles", id: profile.id }}>{name}</RecordButton><div className="truncate text-[10px] text-muted-foreground">{profile.jobTitle || "Member"}</div></div></div>}
-        <Button variant="outline" size="icon" aria-label="Sign out" title="Sign out" className="rounded-lg border-border/60 bg-card/60 text-muted-foreground hover:bg-card hover:text-destructive" onClick={async () => { await supabase.auth.signOut(); window.location.href = "/auth"; }}><LogOut /></Button>
+        <Button variant="outline" size="icon" aria-label="Sign out" title="Sign out" className="rounded-lg border-border/60 bg-card/60 text-muted-foreground hover:bg-card hover:text-destructive" onClick={async () => { await cache.cancelQueries(); cache.clear(); await supabase.auth.signOut(); window.location.replace("/auth"); }}><LogOut /></Button>
       </div>
     </header>
-    <Dialog open={open} onOpenChange={setOpen}><DialogContent className="max-w-xl"><DialogHeader><DialogTitle>Search everything</DialogTitle></DialogHeader><Input aria-label="Search records" placeholder="Search items, BOMs, routings, changes, documents…" value={query} onChange={(e) => setQuery(e.target.value)} /><div className="max-h-80 space-y-2 overflow-y-auto">{records.map((r) => <div key={`${r.kind}-${r.id}`} className="border-b border-border/60 py-2" onClick={() => setOpen(false)}><RecordButton record={r}>{r.label}</RecordButton></div>)}{records.length === 0 && <p className="py-6 text-center text-sm text-muted-foreground">No matching records.</p>}</div></DialogContent></Dialog>
+    <Dialog open={open} onOpenChange={setOpen}><DialogContent className="max-w-xl"><DialogHeader><DialogTitle>Search everything</DialogTitle></DialogHeader><Input aria-label="Search records" placeholder="Search controlled definitions…" value={query} onChange={(e) => setQuery(e.target.value)} /><div className="max-h-80 space-y-2 overflow-y-auto">{definitions.data?.entities.filter((e) => `${e.code} ${e.name}`.toLowerCase().includes(query.toLowerCase())).map((e) => <Button key={e.id} asChild variant="link" className="h-auto justify-start whitespace-normal text-left"><Link to={e.kind === "ITEM" ? "/items" : e.kind === "BOM" ? "/bom" : e.kind === "ROUTING" ? "/routings" : e.kind === "DOCUMENT" ? "/documents" : e.kind === "PACKAGE" ? "/packages" : e.kind === "WORK_CENTER" ? "/work-centers" : "/changes/$kind"} params={{ kind: "ecr" }} onClick={() => setOpen(false)}>{e.code} · {e.name}</Link></Button>)}{records.map((r) => <div key={`${r.kind}-${r.id}`} className="border-b border-border/60 py-2" onClick={() => setOpen(false)}><RecordButton record={r}>{r.label}</RecordButton></div>)}{records.length === 0 && !definitions.data?.entities.length && <p className="py-6 text-center text-sm text-muted-foreground">No matching records.</p>}</div></DialogContent></Dialog>
   </>;
 }
