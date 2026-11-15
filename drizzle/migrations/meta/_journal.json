@@ -15,6 +15,13 @@
       "when": 1793441372672,
       "tag": "0001_controlled_document_files",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1794743025443,
+      "tag": "0002_plms_scoped_revision_foundation",
+      "breakpoints": true
     }
   ]
 }
