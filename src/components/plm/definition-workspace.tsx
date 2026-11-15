@@ -26,7 +26,7 @@ function Choice({ label, value, values, onChange, disabled = false }: { label: s
 }
 const options = (values: readonly string[]) => values.map((v) => ({ value: v, label: v }));
 
-export function DefinitionWorkspace({ kind = "ITEM", initialRevisionId = "" }: { kind?: DefinitionKind; initialRevisionId?: string }) {
+export function DefinitionWorkspace({ kind = "ITEM", initialRevisionId = "", changeKind }: { kind?: DefinitionKind; initialRevisionId?: string; changeKind?: "ECR" | "ECO" | "ECN" }) {
   const { data } = useSuspenseQuery(workspaceOptions);
   const qc = useQueryClient();
   const [orgId, setOrgId] = useState(data.revisions.find(r => r.id === initialRevisionId)?.organization_id ?? data.organizations[0]?.id ?? "");
@@ -37,18 +37,18 @@ export function DefinitionWorkspace({ kind = "ITEM", initialRevisionId = "" }: {
   const [orgName, setOrgName] = useState("");
   const [busy, setBusy] = useState(false);
   const createOrg = useServerFn(createSandboxWorkspace);
-  const changeKind = !initialRevisionId && window.location.pathname.startsWith("/changes/") ? window.location.pathname.split("/").pop()?.toUpperCase() : undefined;
   const org = data.organizations.find((o) => o.id === orgId);
   const entities = data.entities.filter((e) => e.organization_id === orgId && e.kind === kind && (kind !== "CHANGE" || !changeKind || data.revisions.some(r => r.entity_id === e.id && r.payload.changeKind === changeKind)) && (!siteId || e.site_id === null || e.site_id === siteId) && `${e.code} ${e.name}`.toLowerCase().includes(search.toLowerCase()));
   const revisions = data.revisions.filter((r) => entities.some((e) => e.id === r.entity_id));
   const revision = revisions.find((r) => r.id === selected);
   const titles = { ITEM: "Item Master & Part Catalog", BOM: "EBOM / MBOM Workbench", ROUTING: "Digital Routings", DOCUMENT: "Controlled Document Vault", CHANGE: "Engineering Change Workspace", PACKAGE: "Production Definition Packages", WORK_CENTER: "Logical Work Centers" };
+  const changeTitles = { ECR: "Engineering Change Requests", ECO: "Engineering Change Orders", ECN: "Engineering Change Notices" };
   if (initialRevisionId && org) {
     const profileRevision = data.revisions.find(r => r.id === selected);
     return profileRevision ? <RevisionEditor key={profileRevision.id} revision={profileRevision} data={data} environment={org.environment} onSelect={setSelected} /> : null;
   }
   return <div className="space-y-5">
-    <PageHeader code={`PLMS · ${kind}`} title={titles[kind]} actions={<Button disabled={!org} onClick={() => setCreating(true)}><Plus />{kind === "ITEM" ? "New item" : "New definition"}</Button>} />
+    <PageHeader code={`PLMS · ${changeKind ?? kind}`} title={changeKind ? changeTitles[changeKind] : titles[kind]} actions={<Button disabled={!org} onClick={() => setCreating(true)}><Plus />{kind === "ITEM" ? "New item" : "New definition"}</Button>} />
     <div className="flex flex-wrap items-end gap-3">
       <div className="min-w-48"><Choice label="Organization workspace" value={orgId} values={[{ value: "", label: "Select workspace" }, ...data.organizations.map((o) => ({ value: o.id, label: `${o.name} · ${o.environment}` }))]} onChange={(v) => { setOrgId(v); setSiteId(""); setSelected(""); }} /></div>
       <div className="min-w-40"><Choice label="Site applicability" value={siteId} values={[{ value: "", label: "Organization-wide" }, ...data.sites.filter((s) => s.organization_id === orgId).map((s) => ({ value: s.id, label: s.name }))]} onChange={setSiteId} /></div>
@@ -65,13 +65,13 @@ export function DefinitionWorkspace({ kind = "ITEM", initialRevisionId = "" }: {
       return <tr key={entity.id} className="border-t border-border"><td className={td}><Button variant="link" className="h-auto justify-start whitespace-normal p-0 text-left" onClick={() => setSelected(draft?.id ?? latest?.id ?? "")}>{entity.code} · {entity.name}</Button></td><td className={td}>{effective?.revision_label ?? "None"}</td><td className={td}>{draft?.revision_label ?? "—"}</td><td className={td}><Status value={latest?.state ?? "UNKNOWN"} /></td><td className={td}><Status value="BLOCKED" /></td><td className={td}><Button variant="outline" size="sm" onClick={() => setSelected(latest?.id ?? "")}>Open</Button></td></tr>;
     })}</tbody></table>{entities.length === 0 && <p className="p-6 text-center text-sm text-muted-foreground">No controlled {kind.toLowerCase()} definitions in this workspace.</p>}</div>}
     {revision && org && <RevisionEditor key={revision.id} revision={revision} data={data} environment={org.environment} onSelect={setSelected} />}
-    <CreateDefinition open={creating} onOpenChange={setCreating} kind={kind} organizationId={orgId} siteId={siteId || null} data={data} onCreated={setSelected} />
+    <CreateDefinition open={creating} onOpenChange={setCreating} kind={kind} changeKind={changeKind} organizationId={orgId} siteId={siteId || null} data={data} onCreated={setSelected} />
   </div>;
 }
 
-function CreateDefinition({ open, onOpenChange, kind, organizationId, siteId, data, onCreated }: { open: boolean; onOpenChange: (o: boolean) => void; kind: DefinitionKind; organizationId: string; siteId: string | null; data: WorkspaceData; onCreated: (id: string) => void }) {
+function CreateDefinition({ open, onOpenChange, kind, changeKind, organizationId, siteId, data, onCreated }: { open: boolean; onOpenChange: (o: boolean) => void; kind: DefinitionKind; changeKind?: string; organizationId: string; siteId: string | null; data: WorkspaceData; onCreated: (id: string) => void }) {
   const run = useServerFn(definitionCommand); const qc = useQueryClient();
-  const [step, setStep] = useState(0), [code, setCode] = useState(""), [name, setName] = useState(""), [reason, setReason] = useState("Initial engineering draft"), [payload, setPayload] = useState<Payload>(newPayload(kind)), [itemId, setItemId] = useState(""), [busy, setBusy] = useState(false), [error, setError] = useState("");
+  const [step, setStep] = useState(0), [code, setCode] = useState(""), [name, setName] = useState(""), [reason, setReason] = useState("Initial engineering draft"), [payload, setPayload] = useState<Payload>(() => ({ ...newPayload(kind), ...(kind === "CHANGE" && changeKind ? { changeKind } : {}) })), [itemId, setItemId] = useState(""), [busy, setBusy] = useState(false), [error, setError] = useState("");
   const steps = ["Identity", "Classification / units", "Manufacturing applicability", "Tracking / specification", "Review / save"];
   const patch = (key: string, value: Payload[string]) => setPayload((p) => ({ ...p, [key]: value }));
   const save = async () => { setBusy(true); setError(""); try { const result = await run({ data: { action: "create", organizationId, siteId, kind, code, name, reason, payload: { ...payload, ...(kind === "ITEM" ? { ownerId: data.userId } : {}) }, ...(itemId ? { itemRevisionId: itemId } : {}) } }); await qc.invalidateQueries({ queryKey: workspaceOptions.queryKey }); onCreated(result.revision.id); onOpenChange(false); toast.success("Draft saved to your workspace"); } catch (e) { setError(e instanceof Error ? e.message : "Draft not saved"); } finally { setBusy(false); } };
