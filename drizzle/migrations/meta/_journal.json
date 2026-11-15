@@ -29,6 +29,13 @@
       "when": 1794743114059,
       "tag": "0003_plms_transactional_commands",
       "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1794743185718,
+      "tag": "0004_plms_legacy_write_boundary",
+      "breakpoints": true
     }
   ]
 }
