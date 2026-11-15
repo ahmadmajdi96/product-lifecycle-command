@@ -38,15 +38,15 @@ export function DefinitionWorkspace({ kind = "ITEM", initialRevisionId = "" }: {
   const [busy, setBusy] = useState(false);
   const createOrg = useServerFn(createSandboxWorkspace);
   const changeKind = !initialRevisionId && window.location.pathname.startsWith("/changes/") ? window.location.pathname.split("/").pop()?.toUpperCase() : undefined;
-  useEffect(() => {
-    const receive = (event: Event) => { const id = (event as CustomEvent<string>).detail; const r = data.revisions.find(v => v.id === id); if (!r) return; setOrgId(r.organization_id); setSiteId(r.site_id ?? ""); setSelected(id); setSearch(""); };
-    window.addEventListener("plm:open-definition", receive); return () => window.removeEventListener("plm:open-definition", receive);
-  }, [data]);
   const org = data.organizations.find((o) => o.id === orgId);
   const entities = data.entities.filter((e) => e.organization_id === orgId && e.kind === kind && (kind !== "CHANGE" || !changeKind || data.revisions.some(r => r.entity_id === e.id && r.payload.changeKind === changeKind)) && (!siteId || e.site_id === null || e.site_id === siteId) && `${e.code} ${e.name}`.toLowerCase().includes(search.toLowerCase()));
   const revisions = data.revisions.filter((r) => entities.some((e) => e.id === r.entity_id));
   const revision = revisions.find((r) => r.id === selected);
   const titles = { ITEM: "Item Master & Part Catalog", BOM: "EBOM / MBOM Workbench", ROUTING: "Digital Routings", DOCUMENT: "Controlled Document Vault", CHANGE: "Engineering Change Workspace", PACKAGE: "Production Definition Packages", WORK_CENTER: "Logical Work Centers" };
+  if (initialRevisionId && org) {
+    const profileRevision = data.revisions.find(r => r.id === selected);
+    return profileRevision ? <RevisionEditor key={profileRevision.id} revision={profileRevision} data={data} environment={org.environment} onSelect={setSelected} /> : null;
+  }
   return <div className="space-y-5">
     <PageHeader code={`PLMS · ${kind}`} title={titles[kind]} actions={<Button disabled={!org} onClick={() => setCreating(true)}><Plus />{kind === "ITEM" ? "New item" : "New definition"}</Button>} />
     <div className="flex flex-wrap items-end gap-3">

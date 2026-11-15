@@ -102,7 +102,7 @@ function DefinitionProfile() {
   useEffect(() => { const receive = (e: Event) => setId((e as CustomEvent<string>).detail); window.addEventListener("plm:open-definition", receive); return () => window.removeEventListener("plm:open-definition", receive); }, []);
   const revision = data?.revisions.find(r => r.id === id);
   const entity = data?.entities.find(e => e.id === revision?.entity_id);
-  return <Dialog open={!!entity} onOpenChange={o => { if (!o) setId(""); }}><DialogContent className="max-h-[90vh] max-w-6xl overflow-y-auto"><DialogHeader><DialogTitle>{entity?.code} · {entity?.name}</DialogTitle></DialogHeader>{entity && revision && <DefinitionWorkspace key={id} kind={entity.kind} initialRevisionId={id} />}</DialogContent></Dialog>;
+  return <Dialog open={!!entity} onOpenChange={o => { if (!o) setId(""); }}><DialogContent className="mes-content max-h-[90vh] max-w-6xl overflow-y-auto"><DialogHeader><DialogTitle className="break-words">{entity?.code} · {entity?.name}</DialogTitle></DialogHeader>{entity && revision && <DefinitionWorkspace key={id} kind={entity.kind} initialRevisionId={id} />}</DialogContent></Dialog>;
 }
 function RootComponent() {
   const { queryClient } = Route.useRouteContext();
