@@ -11,6 +11,8 @@ export const Route = createFileRoute("/_authenticated/")({
       { name: "description", content: "Engineering command overview: lifecycle status, open changes, and MOS sync health." },
       { property: "og:title", content: "Command Overview · Cortanex PLM" },
       { property: "og:description", content: "Engineering command overview for the Cortanex Manufacturing Operating System." },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary" },
     ],
   }),
   component: Overview,

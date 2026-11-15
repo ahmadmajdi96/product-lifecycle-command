@@ -13,6 +13,8 @@ export const Route = createFileRoute("/_authenticated/audit")({
       { name: "description", content: "Immutable 21 CFR Part 11 audit trail of PLM actions and electronic signatures." },
       { property: "og:title", content: "Audit Trail · Cortanex PLM" },
       { property: "og:description", content: "21 CFR Part 11 compliant audit log." },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary" },
     ],
   }),
   component: Audit,

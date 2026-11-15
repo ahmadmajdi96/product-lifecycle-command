@@ -29,6 +29,8 @@ export const Route = createFileRoute("/_authenticated/changes/$kind")({
       { name: "description", content: loaderData?.desc ?? "Engineering change management" },
       { property: "og:title", content: `${loaderData?.title ?? "Engineering Change"} · Cortanex PLM` },
       { property: "og:description", content: loaderData?.desc ?? "Engineering change management" },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary" },
     ],
   }),
   component: Changes,

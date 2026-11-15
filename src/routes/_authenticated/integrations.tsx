@@ -14,6 +14,8 @@ export const Route = createFileRoute("/_authenticated/integrations")({
       { name: "description", content: "Export released BOMs and routings to MES, sync inspection plans with CORTA QC, track tooling in Unified Command Center." },
       { property: "og:title", content: "Integration Hub · Cortanex PLM" },
       { property: "og:description", content: "MOS integration hub for released engineering data." },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary" },
     ],
   }),
   component: Hub,
