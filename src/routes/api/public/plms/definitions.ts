@@ -1,0 +1,22 @@
+import { createFileRoute } from "@tanstack/react-router";
+import { z } from "zod";
+export const Route = createFileRoute("/api/public/plms/definitions")({ server: { handlers: { GET: async ({ request }) => {
+  const key = process.env["PLMS_CONSUMER_SECRET"], org = process.env["PLMS_CONSUMER_ORGANIZATION_ID"], site = process.env["PLMS_CONSUMER_SITE_ID"];
+  if (!key || !org) return Response.json({ error: "Consumer contract not configured" }, { status: 503 });
+  const supplied = request.headers.get("x-api-key") ?? "";
+  const { timingSafeEqual, createHash } = await import("node:crypto");
+  if (!timingSafeEqual(createHash("sha256").update(supplied).digest(), createHash("sha256").update(key).digest())) return new Response("Unauthorized", { status: 401 });
+  const parsed = z.object({ entityId: z.string().uuid().optional(), revisionId: z.string().uuid().optional() }).safeParse(Object.fromEntries(new URL(request.url).searchParams));
+  if (!parsed.success || !parsed.data.entityId && !parsed.data.revisionId) return Response.json({ error: "Exact entity or package revision required" }, { status: 400 });
+  const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+  const orgRow = await supabaseAdmin.from("plm_organizations").select("environment").eq("id", org).maybeSingle();
+  if (orgRow.data?.environment !== "PRODUCTION") return Response.json({ error: "Sandbox cannot supply production definitions" }, { status: 403 });
+  let query = supabaseAdmin.from("plm_revisions").select("id,entity_id,revision_label,state,payload,content_hash,effective_from,effective_to,site_id").eq("organization_id", org).eq("state", "RELEASED");
+  if (parsed.data.revisionId) query = query.eq("id", parsed.data.revisionId); else if (parsed.data.entityId) query = query.eq("entity_id", parsed.data.entityId);
+  const result = await query;
+  const today = new Date().toISOString().slice(0, 10);
+  const rows = (result.data ?? []).filter((r) => (r.site_id === null || r.site_id === site) && (parsed.data.revisionId || r.effective_from !== null && r.effective_from <= today && (r.effective_to === null || r.effective_to > today)));
+  if (result.error || rows.length === 0) return new Response("Definition not available", { status: 404 });
+  if (rows.length > 1) return Response.json({ error: "Ambiguous effective revision" }, { status: 409 });
+  return Response.json({ definition: rows[0] }, { headers: { "Cache-Control": "no-store" } });
+} } } });
