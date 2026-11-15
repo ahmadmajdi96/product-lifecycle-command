@@ -27,15 +27,13 @@ export function localCan(roles: AppRole[], res: Resource, act: Action) {
 }
 
 export function can(res: Resource, act: Action) {
-  if (localRoles.includes("admin")) return true;
   if (hub.configured && hub.reachable && hub.permissions.length > 0) {
     if (!hub.active) return false;
     const p = hub.permissions.find((x) => x.resource_key === res || x.resource_key === `plm.${res}`);
     const allowed = !!p && ({ view: p.can_view, create: p.can_create, edit: p.can_edit, delete: p.can_delete } as const)[act];
-    // Writes also need a local engineering role, since the database enforces it.
-    return act === "view" ? allowed : allowed && localCan(localRoles, res, act);
+    return allowed;
   }
-  return localCan(localRoles, res, act);
+  return act === "view";
 }
 
 export function useCan(res: Resource, act: Action) {

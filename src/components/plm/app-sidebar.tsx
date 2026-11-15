@@ -13,6 +13,8 @@ const groups = [
     { title: "Item Master", url: "/items", icon: Boxes },
     { title: "BOM Workbench", url: "/bom", icon: Network },
     { title: "Routings", url: "/routings", icon: RouteIcon },
+     { title: "Logical Work Centers", url: "/work-centers", icon: Cpu },
+     { title: "Production Packages", url: "/packages", icon: FolderLock },
   ] },
   { label: "Engineering Change", items: [
     { title: "ECR · Requests", url: "/changes/ecr", kind: "ecr", icon: FileWarning },
