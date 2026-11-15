@@ -18,6 +18,8 @@ export const Route = createFileRoute("/_authenticated/items")({
       { name: "description", content: "Part catalog with revision control, lifecycle phases and date effectivity." },
       { property: "og:title", content: "Item Master · Cortanex PLM" },
       { property: "og:description", content: "Part catalog with revision control and date effectivity." },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary" },
     ],
   }),
   component: Items,

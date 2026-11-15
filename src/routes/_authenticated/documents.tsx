@@ -20,6 +20,8 @@ export const Route = createFileRoute("/_authenticated/documents")({
       { name: "description", content: "Controlled CAD, drawings and SOPs with checkout locking, watermarked preview and Part 11 signatures." },
       { property: "og:title", content: "Document Vault · Cortanex PLM" },
       { property: "og:description", content: "Controlled document vault with checkout/check-in locking." },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary" },
     ],
   }),
   component: Vault,

@@ -17,6 +17,8 @@ export const Route = createFileRoute("/_authenticated/bom")({
       { name: "description", content: "Multi-level EBOM and MBOM tree with scrap factors and redline revision diff." },
       { property: "og:title", content: "BOM Workbench · Cortanex PLM" },
       { property: "og:description", content: "Multi-level EBOM/MBOM with redline revision comparison." },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary" },
     ],
   }),
   component: BomPage,

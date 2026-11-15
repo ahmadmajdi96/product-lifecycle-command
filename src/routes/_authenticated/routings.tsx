@@ -16,6 +16,8 @@ export const Route = createFileRoute("/_authenticated/routings")({
       { name: "description", content: "Standard and rework routings with work centers, setup and cycle times, linked SOPs." },
       { property: "og:title", content: "Routings · Cortanex PLM" },
       { property: "og:description", content: "Digital routings and operation sequences." },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary" },
     ],
   }),
   component: Routings,
