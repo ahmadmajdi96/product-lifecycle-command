@@ -4,7 +4,14 @@ export const KINDS = ["ITEM", "BOM", "ROUTING", "DOCUMENT", "CHANGE", "PACKAGE",
 export type DefinitionKind = typeof KINDS[number];
 export const UNITS = ["EA", "KG", "G", "L", "ML", "M", "MM", "MIN", "SEC"] as const;
 export const decimal = z.string().regex(/^\d+(\.\d{1,9})?$/, "Use a decimal with at most nine fractional digits");
-export type Payload = Record<string, unknown>;
+export type JsonValue = string | number | boolean | null | JsonValue[] | { [key: string]: JsonValue };
+export interface Payload {
+  [key: string]: JsonValue | MaterialLine[] | RouteOperation[] | undefined;
+  classification?: string; makeBuy?: string; baseUnit?: string; tracking?: string; shelfLifeDays?: string; notes?: string;
+  lines?: MaterialLine[]; operations?: RouteOperation[]; outputQuantity?: string; outputUnit?: string;
+  requiredConsumers?: string[]; revisionIds?: string[]; affectedRevisionIds?: string[]; changeKind?: string;
+  cutover?: string; amendmentRequest?: string; capabilities?: string[]; documentKind?: string; recipeRequired?: boolean;
+}
 export interface DefinitionEntity { id: string; organization_id: string; site_id: string | null; kind: DefinitionKind; code: string; name: string }
 export interface DefinitionRevision { id: string; entity_id: string; organization_id: string; site_id: string | null; revision_label: string; state: string; version: number; payload: Payload; content_hash: string; author_id: string; item_revision_id: string | null; parent_revision_id: string | null; effective_from: string | null; effective_to: string | null; reason: string; created_at: string }
 export interface MaterialLine { id: string; componentId: string; revisionId: string; policy: "EXACT" | "LATEST_EFFECTIVE"; quantity: string; unit: string; scrap: string; operationId: string; substituteGroup: string; recipeGroup: string }
