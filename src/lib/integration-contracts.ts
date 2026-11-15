@@ -1,0 +1,5 @@
+import { z } from "zod";
+export const acknowledgementSchema = z.object({ eventId: z.string().uuid(), organizationId: z.string().uuid(), siteId: z.string().uuid().nullable(), consumer: z.enum(["MES", "EMS", "RMS", "QMS", "APS"]), revisionId: z.string().uuid(), contentHash: z.string().regex(/^[a-f0-9]{64}$/), status: z.enum(["BUSINESS_ACCEPTED", "REJECTED"]), reason: z.string().min(3).max(2000), sourceTimestamp: z.string().datetime() });
+export interface AdapterResult<T> { status: "UNKNOWN" | "PENDING" | "VERIFIED"; data: T | null; source: string; updatedAt: string | null; blocker: string | null }
+export interface DefinitionAdapter { system: string; exactRevision(id: string): Promise<AdapterResult<Record<string, string>>> }
+export function unavailableAdapter(system: string): DefinitionAdapter { return { system, exactRevision: async () => ({ status: "UNKNOWN", data: null, source: system, updatedAt: null, blocker: `${system} authoritative contract unavailable` }) }; }

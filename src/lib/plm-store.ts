@@ -43,6 +43,12 @@ export async function loadAll() {
     return q;
   }));
   const next = empty() as unknown as Record<string, unknown[]>;
+  if (res.some((r) => r.error)) {
+    toast.error("Legacy reference data could not load. Existing cached records were retained.");
+    loaded = true;
+    emit();
+    return;
+  }
   res.forEach((r, i) => {
     if (r.error) toast.error(`Could not load ${keys[i]}: ${r.error.message}`);
     next[keys[i]] = ((r.data ?? []) as Record<string, unknown>[]).map(inn);
@@ -87,26 +93,15 @@ async function persist(prev: PlmState, next: PlmState) {
 }
 
 export function update(fn: (s: PlmState) => PlmState) {
-  const prev = state;
-  state = fn(state);
-  emit();
-  void persist(prev, state);
+  void fn;
+  toast.error("Legacy records are read-only references. Use the controlled definition workspace.");
 }
 
 export const uid = () => crypto.randomUUID();
 
 export function audit(action: string, entity: string, detail: string, sign = false) {
-  const entry: AuditEntry = {
-    id: uid(),
-    at: new Date().toISOString(),
-    user: CURRENT_USER,
-    actorId: CURRENT_USER_ID,
-    action,
-    entity,
-    detail,
-    signature: sign ? "SHA256:" + uid().replace(/-/g, "").slice(0, 16) : undefined,
-  };
-  update((s) => ({ ...s, audit: [entry, ...s.audit] }));
+  void action; void entity; void detail; void sign;
+  // Controlled commands create real audit evidence in the transaction.
 }
 
 export function nextRev(rev: string) {

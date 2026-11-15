@@ -1,50 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useState } from "react";
-import { ShieldCheck } from "lucide-react";
-import { usePlm } from "@/lib/plm-store";
-import { PageHeader, Mono, th, td } from "@/components/plm/ui";
-import { Input } from "@/components/ui/input";
-import { RecordLink } from "@/components/plm/record-profiles";
-
-export const Route = createFileRoute("/_authenticated/audit")({
-  head: () => ({
-    meta: [
-      { title: "Audit Trail · Cortanex PLM" },
-      { name: "description", content: "Immutable 21 CFR Part 11 audit trail of PLM actions and electronic signatures." },
-      { property: "og:title", content: "Audit Trail · Cortanex PLM" },
-      { property: "og:description", content: "21 CFR Part 11 compliant audit log." },
-      { property: "og:type", content: "website" },
-      { name: "twitter:card", content: "summary" },
-    ],
-  }),
-  component: Audit,
-});
-
-function Audit() {
-  const audit = usePlm((s) => s.audit);
-  const [q, setQ] = useState("");
-  const list = audit.filter((a) => (a.action + a.entity + a.user + a.detail).toLowerCase().includes(q.toLowerCase()));
-  return (
-    <div className="space-y-4">
-      <PageHeader code="DV-02 · 21 CFR PART 11" title="Audit Trail & Electronic Signatures" desc="Append-only, time-stamped record of who did what, when, and the meaning of each signature." />
-      <Input placeholder="Filter by user, action, entity…" value={q} onChange={(e) => setQ(e.target.value)} className="w-80" />
-      <div className="overflow-x-auto rounded-md border border-border bg-card">
-        <table className="w-full text-sm">
-          <thead className="bg-muted/40"><tr><th className={th}>Timestamp (UTC)</th><th className={th}>User</th><th className={th}>Action</th><th className={th}>Entity</th><th className={th}>Detail</th><th className={th}>Signature</th></tr></thead>
-          <tbody>
-            {list.map((a) => (
-              <tr key={a.id} className="border-t border-border">
-                <td className={td}><Mono>{a.at.slice(0, 19).replace("T", " ")}</Mono></td>
-                <td className={td}><RecordLink text={a.user} /></td>
-                <td className={td}><Mono className="text-primary">{a.action}</Mono></td>
-                <td className={td}><Mono>{a.entity}</Mono></td>
-                <td className={td}>{a.detail}</td>
-                <td className={td}>{a.signature ? <span className="flex items-center gap-1 text-success"><ShieldCheck className="h-3.5 w-3.5" /><Mono>{a.signature}</Mono></span> : <span className="text-muted-foreground">—</span>}</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
-    </div>
-  );
-}
+import { useSuspenseQuery } from "@tanstack/react-query";
+import { workspaceOptions } from "@/components/plm/definition-workspace";
+import { PageHeader, Panel, th, td } from "@/components/plm/ui";
+export const Route=createFileRoute("/_authenticated/audit")({head:()=>({meta:[{title:"Audit Trail · Cortanex PLM"},{name:"description",content:"Transaction-bound engineering audit evidence."},{property:"og:title",content:"Audit Trail · Cortanex PLM"},{property:"og:description",content:"Append-only actor, reason, revision hash and correlation history."},{property:"og:type",content:"website"},{name:"twitter:card",content:"summary"}]}),loader:({context})=>context.queryClient.ensureQueryData(workspaceOptions),component:Audit});
+function Audit(){const {data}=useSuspenseQuery(workspaceOptions);return <div className="space-y-5"><PageHeader code="PLMS · RETAINED EVIDENCE" title="Audit Trail & Review Decisions"/><Panel title="Controlled audit"><table className="w-full text-sm"><thead><tr>{["UTC","Actor","Action","Reason","Revision / hash","Correlation"].map(t=><th key={t} className={th}>{t}</th>)}</tr></thead><tbody>{data.audits.map(a=><tr key={a.id} className="border-t border-border"><td className={td}>{a.occurred_at}</td><td className={td}>{a.actor_id}</td><td className={`${td} text-primary`}>{a.action}</td><td className={td}>{a.reason}</td><td className={`${td} font-mono text-xs`}>{a.revision_id}<br/>{a.content_hash?.slice(0,16)}</td><td className={`${td} font-mono text-xs`}>{a.correlation_id}</td></tr>)}</tbody></table>{!data.audits.length&&<p className="p-6 text-muted-foreground">No controlled audit events.</p>}</Panel><p className="text-xs text-muted-foreground">Formal signature qualification, retention policy and regulatory validation require organization approval; this application does not claim compliance certification.</p></div>;}

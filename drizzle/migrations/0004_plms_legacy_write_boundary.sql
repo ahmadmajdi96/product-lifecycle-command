@@ -1,0 +1,16 @@
+DO $$ DECLARE t text; BEGIN FOREACH t IN ARRAY ARRAY['items','boms','routings','changes','docs','syncs','work_orders','work_centers','inventory'] LOOP EXECUTE format('REVOKE INSERT, UPDATE, DELETE ON public.%I FROM authenticated',t); END LOOP; END $$;
+REVOKE INSERT ON public.audit FROM authenticated;
+REVOKE INSERT,DELETE,UPDATE ON public.user_roles FROM authenticated;
+DROP POLICY IF EXISTS "Profiles readable by signed-in users" ON public.profiles;
+CREATE POLICY plm_own_profile_read ON public.profiles FOR SELECT TO authenticated USING(id=auth.uid() OR EXISTS(SELECT 1 FROM public.plm_memberships a JOIN public.plm_memberships b ON b.organization_id=a.organization_id WHERE a.user_id=auth.uid() AND a.active AND b.user_id=profiles.id AND b.active));
+DROP POLICY IF EXISTS "Admins update any profile" ON public.profiles;
+DROP POLICY IF EXISTS "Roles readable by signed-in users" ON public.user_roles;
+CREATE POLICY plm_own_legacy_role_read ON public.user_roles FOR SELECT TO authenticated USING(user_id=auth.uid());
+DROP POLICY IF EXISTS "Read controlled document files" ON storage.objects;
+DROP POLICY IF EXISTS "Upload controlled document files" ON storage.objects;
+DROP POLICY IF EXISTS "Remove own unregistered files" ON storage.objects;
+CREATE POLICY plm_scoped_file_read ON storage.objects FOR SELECT TO authenticated USING(bucket_id='controlled-documents' AND EXISTS(SELECT 1 FROM public.plm_document_files f WHERE f.storage_path=name AND public.plm_has_scope(f.organization_id,f.site_id)));
+CREATE POLICY plm_scoped_staging_upload ON storage.objects FOR INSERT TO authenticated WITH CHECK(bucket_id='controlled-documents' AND (storage.foldername(name))[1]=auth.uid()::text AND EXISTS(SELECT 1 FROM public.plm_memberships m WHERE m.user_id=auth.uid() AND m.active));
+CREATE POLICY plm_remove_unregistered_staging ON storage.objects FOR DELETE TO authenticated USING(bucket_id='controlled-documents' AND owner_id=auth.uid()::text AND NOT EXISTS(SELECT 1 FROM public.plm_document_files f WHERE f.storage_path=name) AND NOT EXISTS(SELECT 1 FROM public.docs d WHERE d.file_path=name));
+CREATE OR REPLACE FUNCTION public.handle_new_user() RETURNS trigger LANGUAGE plpgsql SECURITY DEFINER SET search_path=public AS $$ BEGIN INSERT INTO public.profiles(id,email,full_name) VALUES(new.id,new.email,coalesce(new.raw_user_meta_data->>'full_name',split_part(new.email,'@',1))); RETURN new; END $$;
+COMMENT ON TABLE public.user_roles IS 'DEPRECATED as PLMS action authority: central Access Hub owns scoped production permissions.';

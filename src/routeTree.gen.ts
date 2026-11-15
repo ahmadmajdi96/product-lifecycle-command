@@ -17,9 +17,13 @@ import { Route as AuthenticatedBomRouteImport } from './routes/_authenticated/bo
 import { Route as AuthenticatedDocumentsRouteImport } from './routes/_authenticated/documents'
 import { Route as AuthenticatedIntegrationsRouteImport } from './routes/_authenticated/integrations'
 import { Route as AuthenticatedItemsRouteImport } from './routes/_authenticated/items'
+import { Route as AuthenticatedPackagesRouteImport } from './routes/_authenticated/packages'
 import { Route as AuthenticatedRoutingsRouteImport } from './routes/_authenticated/routings'
 import { Route as AuthenticatedUsersRouteImport } from './routes/_authenticated/users'
+import { Route as AuthenticatedWorkCentersRouteImport } from './routes/_authenticated/work-centers'
 import { Route as AuthenticatedChangesKindRouteImport } from './routes/_authenticated/changes.$kind'
+import { Route as ApiPublicPlmsAcknowledgementsRouteImport } from './routes/api/public/plms/acknowledgements'
+import { Route as ApiPublicPlmsDefinitionsRouteImport } from './routes/api/public/plms/definitions'
 
 const AuthenticatedRouteRoute = AuthenticatedRouteRouteImport.update({
   id: '/_authenticated',
@@ -61,6 +65,11 @@ const AuthenticatedItemsRoute = AuthenticatedItemsRouteImport.update({
   path: '/items',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
+const AuthenticatedPackagesRoute = AuthenticatedPackagesRouteImport.update({
+  id: '/packages',
+  path: '/packages',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
 const AuthenticatedRoutingsRoute = AuthenticatedRoutingsRouteImport.update({
   id: '/routings',
   path: '/routings',
@@ -71,11 +80,29 @@ const AuthenticatedUsersRoute = AuthenticatedUsersRouteImport.update({
   path: '/users',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
+const AuthenticatedWorkCentersRoute =
+  AuthenticatedWorkCentersRouteImport.update({
+    id: '/work-centers',
+    path: '/work-centers',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
 const AuthenticatedChangesKindRoute =
   AuthenticatedChangesKindRouteImport.update({
     id: '/changes/$kind',
     path: '/changes/$kind',
     getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
+const ApiPublicPlmsAcknowledgementsRoute =
+  ApiPublicPlmsAcknowledgementsRouteImport.update({
+    id: '/api/public/plms/acknowledgements',
+    path: '/api/public/plms/acknowledgements',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const ApiPublicPlmsDefinitionsRoute =
+  ApiPublicPlmsDefinitionsRouteImport.update({
+    id: '/api/public/plms/definitions',
+    path: '/api/public/plms/definitions',
+    getParentRoute: () => rootRouteImport,
   } as any)
 
 export interface FileRoutesByFullPath {
@@ -86,9 +113,13 @@ export interface FileRoutesByFullPath {
   '/documents': typeof AuthenticatedDocumentsRoute
   '/integrations': typeof AuthenticatedIntegrationsRoute
   '/items': typeof AuthenticatedItemsRoute
+  '/packages': typeof AuthenticatedPackagesRoute
   '/routings': typeof AuthenticatedRoutingsRoute
   '/users': typeof AuthenticatedUsersRoute
+  '/work-centers': typeof AuthenticatedWorkCentersRoute
   '/changes/$kind': typeof AuthenticatedChangesKindRoute
+  '/api/public/plms/acknowledgements': typeof ApiPublicPlmsAcknowledgementsRoute
+  '/api/public/plms/definitions': typeof ApiPublicPlmsDefinitionsRoute
 }
 export interface FileRoutesByTo {
   '/auth': typeof AuthRoute
@@ -97,10 +128,14 @@ export interface FileRoutesByTo {
   '/documents': typeof AuthenticatedDocumentsRoute
   '/integrations': typeof AuthenticatedIntegrationsRoute
   '/items': typeof AuthenticatedItemsRoute
+  '/packages': typeof AuthenticatedPackagesRoute
   '/routings': typeof AuthenticatedRoutingsRoute
   '/users': typeof AuthenticatedUsersRoute
+  '/work-centers': typeof AuthenticatedWorkCentersRoute
   '/': typeof AuthenticatedIndexRoute
   '/changes/$kind': typeof AuthenticatedChangesKindRoute
+  '/api/public/plms/acknowledgements': typeof ApiPublicPlmsAcknowledgementsRoute
+  '/api/public/plms/definitions': typeof ApiPublicPlmsDefinitionsRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -111,10 +146,14 @@ export interface FileRoutesById {
   '/_authenticated/documents': typeof AuthenticatedDocumentsRoute
   '/_authenticated/integrations': typeof AuthenticatedIntegrationsRoute
   '/_authenticated/items': typeof AuthenticatedItemsRoute
+  '/_authenticated/packages': typeof AuthenticatedPackagesRoute
   '/_authenticated/routings': typeof AuthenticatedRoutingsRoute
   '/_authenticated/users': typeof AuthenticatedUsersRoute
+  '/_authenticated/work-centers': typeof AuthenticatedWorkCentersRoute
   '/_authenticated/': typeof AuthenticatedIndexRoute
   '/_authenticated/changes/$kind': typeof AuthenticatedChangesKindRoute
+  '/api/public/plms/acknowledgements': typeof ApiPublicPlmsAcknowledgementsRoute
+  '/api/public/plms/definitions': typeof ApiPublicPlmsDefinitionsRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -126,9 +165,13 @@ export interface FileRouteTypes {
     | '/documents'
     | '/integrations'
     | '/items'
+    | '/packages'
     | '/routings'
     | '/users'
+    | '/work-centers'
     | '/changes/$kind'
+    | '/api/public/plms/acknowledgements'
+    | '/api/public/plms/definitions'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/auth'
@@ -137,10 +180,14 @@ export interface FileRouteTypes {
     | '/documents'
     | '/integrations'
     | '/items'
+    | '/packages'
     | '/routings'
     | '/users'
+    | '/work-centers'
     | '/'
     | '/changes/$kind'
+    | '/api/public/plms/acknowledgements'
+    | '/api/public/plms/definitions'
   id:
     | '__root__'
     | '/_authenticated'
@@ -150,15 +197,21 @@ export interface FileRouteTypes {
     | '/_authenticated/documents'
     | '/_authenticated/integrations'
     | '/_authenticated/items'
+    | '/_authenticated/packages'
     | '/_authenticated/routings'
     | '/_authenticated/users'
+    | '/_authenticated/work-centers'
     | '/_authenticated/'
     | '/_authenticated/changes/$kind'
+    | '/api/public/plms/acknowledgements'
+    | '/api/public/plms/definitions'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   AuthenticatedRouteRoute: typeof AuthenticatedRouteRouteWithChildren
   AuthRoute: typeof AuthRoute
+  ApiPublicPlmsAcknowledgementsRoute: typeof ApiPublicPlmsAcknowledgementsRoute
+  ApiPublicPlmsDefinitionsRoute: typeof ApiPublicPlmsDefinitionsRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -219,6 +272,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedItemsRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/packages': {
+      id: '/_authenticated/packages'
+      path: '/packages'
+      fullPath: '/packages'
+      preLoaderRoute: typeof AuthenticatedPackagesRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/routings': {
       id: '/_authenticated/routings'
       path: '/routings'
@@ -233,12 +293,33 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedUsersRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/work-centers': {
+      id: '/_authenticated/work-centers'
+      path: '/work-centers'
+      fullPath: '/work-centers'
+      preLoaderRoute: typeof AuthenticatedWorkCentersRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/changes/$kind': {
       id: '/_authenticated/changes/$kind'
       path: '/changes/$kind'
       fullPath: '/changes/$kind'
       preLoaderRoute: typeof AuthenticatedChangesKindRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/api/public/plms/acknowledgements': {
+      id: '/api/public/plms/acknowledgements'
+      path: '/api/public/plms/acknowledgements'
+      fullPath: '/api/public/plms/acknowledgements'
+      preLoaderRoute: typeof ApiPublicPlmsAcknowledgementsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/public/plms/definitions': {
+      id: '/api/public/plms/definitions'
+      path: '/api/public/plms/definitions'
+      fullPath: '/api/public/plms/definitions'
+      preLoaderRoute: typeof ApiPublicPlmsDefinitionsRouteImport
+      parentRoute: typeof rootRouteImport
     }
   }
 }
@@ -249,8 +330,10 @@ interface AuthenticatedRouteRouteChildren {
   AuthenticatedDocumentsRoute: typeof AuthenticatedDocumentsRoute
   AuthenticatedIntegrationsRoute: typeof AuthenticatedIntegrationsRoute
   AuthenticatedItemsRoute: typeof AuthenticatedItemsRoute
+  AuthenticatedPackagesRoute: typeof AuthenticatedPackagesRoute
   AuthenticatedRoutingsRoute: typeof AuthenticatedRoutingsRoute
   AuthenticatedUsersRoute: typeof AuthenticatedUsersRoute
+  AuthenticatedWorkCentersRoute: typeof AuthenticatedWorkCentersRoute
   AuthenticatedIndexRoute: typeof AuthenticatedIndexRoute
   AuthenticatedChangesKindRoute: typeof AuthenticatedChangesKindRoute
 }
@@ -261,8 +344,10 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedDocumentsRoute: AuthenticatedDocumentsRoute,
   AuthenticatedIntegrationsRoute: AuthenticatedIntegrationsRoute,
   AuthenticatedItemsRoute: AuthenticatedItemsRoute,
+  AuthenticatedPackagesRoute: AuthenticatedPackagesRoute,
   AuthenticatedRoutingsRoute: AuthenticatedRoutingsRoute,
   AuthenticatedUsersRoute: AuthenticatedUsersRoute,
+  AuthenticatedWorkCentersRoute: AuthenticatedWorkCentersRoute,
   AuthenticatedIndexRoute: AuthenticatedIndexRoute,
   AuthenticatedChangesKindRoute: AuthenticatedChangesKindRoute,
 }
@@ -273,6 +358,8 @@ const AuthenticatedRouteRouteWithChildren =
 const rootRouteChildren: RootRouteChildren = {
   AuthenticatedRouteRoute: AuthenticatedRouteRouteWithChildren,
   AuthRoute: AuthRoute,
+  ApiPublicPlmsAcknowledgementsRoute: ApiPublicPlmsAcknowledgementsRoute,
+  ApiPublicPlmsDefinitionsRoute: ApiPublicPlmsDefinitionsRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
