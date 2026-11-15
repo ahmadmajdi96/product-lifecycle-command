@@ -1,4 +1,15 @@
 # Remaining PLM work
+- [ ] Implement the uploaded ManuQube PLMS brief (WP1–WP9), preserving existing records and MES styling.
+- [ ] WP1: Organization-scoped item identities, immutable revisions, units, wizard and item workspace.
+- [ ] WP2: Revision-bound BOM quantities, output basis, component policies and backend cycle validation.
+- [ ] WP3: Stable linear routing operations, reference-safe reorder and logical work-center mappings.
+- [ ] WP4: Controlled document revisions, server-verified files, atomic checkout and retention.
+- [ ] WP5: Hash-bound independent approval, version conflicts and controlled release/effectivity.
+- [ ] WP6: Revision-specific engineering changes, impact and MES amendment requests.
+- [ ] WP7: Exact production-package manifests and scoped readiness gates.
+- [ ] WP8: Transactional delivery, secured consumer APIs, deduplication, quarantine and reconciliation.
+- [ ] WP9: Organization/site authorization, Access Hub authority, transactional audit and draft recovery.
+- [ ] Verify PLMS acceptance scenarios and produce implementation/delivery evidence.
 - [x] Copy MES Command Center's visual system across PLM; verify signed-in desktop/mobile pages and navigation.
 - [x] Match MES styling and replace placeholder session details.
 - [ ] Add user profiles and user-management controls.
