@@ -98,6 +98,11 @@ function RootComponent() {
   const router = useRouter();
   useEffect(() => {
     const { data } = supabase.auth.onAuthStateChange((event) => {
+      if (event === "PASSWORD_RECOVERY") {
+        sessionStorage.setItem("plm-password-recovery", "true");
+        void router.navigate({ to: "/reset-password", replace: true });
+        return;
+      }
       if (!["SIGNED_IN", "SIGNED_OUT", "USER_UPDATED"].includes(event)) return;
       void router.invalidate();
       if (event !== "SIGNED_OUT") void queryClient.invalidateQueries();
@@ -105,7 +110,7 @@ function RootComponent() {
     return () => data.subscription.unsubscribe();
   }, [router, queryClient]);
   const path = useRouterState({ select: (r) => r.location.pathname });
-  if (path === "/auth") return (<QueryClientProvider client={queryClient}><Outlet /><Toaster /></QueryClientProvider>);
+  if (path === "/auth" || path === "/reset-password") return (<QueryClientProvider client={queryClient}><Outlet /><Toaster /></QueryClientProvider>);
   return (
     <QueryClientProvider client={queryClient}>
       <RecordProfiles><SidebarProvider>

@@ -18,3 +18,4 @@
 - File registration consumes a server-issued verification receipt in a user-scoped transaction, binding the real file hash into revision content; this prevents forged browser metadata and keeps signed links scoped.
 - New user-created workspaces are sandbox-only; production scope and controlled actions require verified Access Hub authority and never inherit local administrator privileges.
 - Appendix A governs package workflow (Draft/In review/Approved/Released); publication, consumer acceptance and effectivity are separate, resolving the WP7 lifecycle wording conflict.
+- Password recovery uses a public reset page and the shared root auth listener to capture recovery sessions; ordinary sign-in never substitutes for a recovery link.
