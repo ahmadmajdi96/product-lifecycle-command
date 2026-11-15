@@ -1253,11 +1253,28 @@ export type Database = {
         }
         Returns: boolean
       }
+      plm_command: { Args: { _command: Json }; Returns: Json }
+      plm_content_hash: { Args: { _payload: Json }; Returns: string }
+      plm_effective_revision: {
+        Args: { _at: string; _entity: string; _org: string; _site: string }
+        Returns: Json
+      }
       plm_has_scope: {
         Args: { _org: string; _site?: string }
         Returns: boolean
       }
       plm_sandbox_workspace: { Args: { _name: string }; Returns: string }
+      plm_validate_payload: {
+        Args: {
+          _item?: string
+          _kind: string
+          _org: string
+          _payload: Json
+          _site: string
+          _strict?: boolean
+        }
+        Returns: Json
+      }
     }
     Enums: {
       app_role: "admin" | "engineer" | "quality" | "manufacturing" | "viewer"
