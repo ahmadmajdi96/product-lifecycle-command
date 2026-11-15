@@ -1,20 +1,20 @@
 # Remaining PLM work
 - [ ] Implement the uploaded ManuQube PLMS brief (WP1–WP9), preserving existing records and MES styling.
-- [ ] WP1: Organization-scoped item identities, immutable revisions, units, wizard and item workspace.
-- [ ] WP2: Revision-bound BOM quantities, output basis, component policies and backend cycle validation.
-- [ ] WP3: Stable linear routing operations, reference-safe reorder and logical work-center mappings.
-- [ ] WP4: Controlled document revisions, server-verified files, atomic checkout and retention.
-- [ ] WP5: Hash-bound independent approval, version conflicts and controlled release/effectivity.
-- [ ] WP6: Revision-specific engineering changes, impact and MES amendment requests.
-- [ ] WP7: Exact production-package manifests and scoped readiness gates.
-- [ ] WP8: Transactional delivery, secured consumer APIs, deduplication, quarantine and reconciliation.
-- [ ] WP9: Organization/site authorization, Access Hub authority, transactional audit and draft recovery.
+- [ ] WP1: Foundation delivered; remaining classification schemas, conversion approval, production scope provisioning and effectivity UI.
+- [ ] WP2: Decimal/output/component/backend-cycle foundation delivered; full tree/redline, substitution and recipe reconciliation remain.
+- [ ] WP3: Stable linear/reorder foundation delivered; exact EMS mapping, quality/document link editing, rework and copy remapping remain.
+- [ ] WP4: Verified/hash-bound files and atomic locks delivered; inline preview, full new-file check-in and formal retention remain.
+- [ ] WP5: Controlled transaction/security foundation delivered; Access Hub contract, full review matrix and production release sequencing remain.
+- [ ] WP6: Exact revision drafts delivered; atomic ECR/ECO/ECN transitions and real MES impact/amendment integration remain.
+- [ ] WP7: Draft exact-reference packages and honest gates delivered; verified assembly, applicability approval and freshness-aware evaluation remain.
+- [ ] WP8: Outbox/inbox and secured API foundation delivered; configured adapters, delivery worker, retry UI and integration tests remain.
+- [ ] WP9: Scoped reads/writes, transactional audit and local draft export delivered; production AMS provisioning and full failure/recovery tests remain.
 - [ ] Verify PLMS acceptance scenarios and produce implementation/delivery evidence.
 - [x] Copy MES Command Center's visual system across PLM; verify signed-in desktop/mobile pages and navigation.
 - [x] Match MES styling and replace placeholder session details.
-- [ ] Add user profiles and user-management controls.
+- [x] Scoped own-profile edits; removed competing local role/password authority.
 - [ ] Add linked profiles for engineering records, work orders, and work centers.
 - [ ] Store uploaded documents and show actual previews.
 - [ ] Verify identity before electronic signatures.
-- [ ] Verify authenticated workflows and tests.
+- [x] Verify persisted sandbox authoring, file registration and negative database checks; broader acceptance remains open above.
 - [ ] Connect Command Access Hub (requires its URL and PLM API key).
